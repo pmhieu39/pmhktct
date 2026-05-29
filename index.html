@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Nhanh Kinh Tế Chính Trị Mác - Lênin</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Card Flip Animation Classes */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Custom scrollbar for beautiful list */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg text-slate-900 tracking-tight flex items-center gap-2">
+                        Kinh Tế Chính Trị <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">Mác-Lênin</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">Học thông minh - Thuộc siêu nhanh</p>
+                </div>
+            </div>
+
+            <!-- Global Study Progress -->
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+                <div class="flex-1 sm:w-48">
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                        <span class="text-indigo-600">Tiến độ thuộc bài:</span>
+                        <span id="progress-percent" class="text-slate-700">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-500 ease-out"></div>
+                    </div>
+                </div>
+                <div class="text-center bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl hidden md:block">
+                    <span id="learned-count" class="text-sm font-bold text-slate-800">0</span>
+                    <span class="text-xs text-slate-400">/</span>
+                    <span id="total-count" class="text-xs font-semibold text-slate-500">86</span>
+                    <p class="text-[10px] text-slate-400 font-medium">Đã thuộc</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="max-w-6xl w-full mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+        
+        <!-- Interactive Mode Selector Tabs -->
+        <div class="bg-slate-100 p-1.5 rounded-2xl flex flex-wrap gap-1 sm:gap-2">
+            <button onclick="switchMode('list')" id="tab-list" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 bg-white text-indigo-700 shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                Danh Sách Học Nhanh
+            </button>
+            <button onclick="switchMode('flashcards')" id="tab-flashcards" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v12m0 0l-4-4m4 4l4-4m0 6V7m0 0l-4 4m4-4l4 4"></path></svg>
+                Thẻ Ghi Nhớ (3D)
+            </button>
+            <button onclick="switchMode('quiz')" id="tab-quiz" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Trắc Nghiệm Đố Vui
+            </button>
+        </div>
+
+        <!-- Filter and Search Zone -->
+        <div id="filter-zone" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col gap-4">
+            <!-- Category Filters -->
+            <div class="flex flex-wrap items-center gap-2" id="part-filters">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mr-1">Chủ đề:</span>
+                <button onclick="filterPart('all')" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white" data-part="all">Tất cả (86 câu)</button>
+                
+                <!-- 50 EASY & SHORT QUESTIONS FILTER BUTTON -->
+                <button onclick="filterPart('easy')" class="part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 flex items-center gap-1.5" data-part="easy">
+                    <span>⚡ 50 Câu Dễ & Ngắn</span>
+                </button>
+
+                <button onclick="filterPart('Phần I')" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-slate-600" data-part="Phần I">I: Khái Quát</button>
+                <button onclick="filterPart('Phần II')" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-slate-600" data-part="Phần II">II: Hàng Hóa-Tiền</button>
+                <button onclick="filterPart('Phần III')" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-slate-600" data-part="Phần III">III: Thặng Dư</button>
+                <button onclick="filterPart('Phần IV')" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-slate-600" data-part="Phần IV">IV: Độc Quyền</button>
+                <button onclick="filterPart('Phần V')" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-slate-600" data-part="Phần V">V: KTTT VN</button>
+                <button onclick="filterFavorite()" class="part-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 flex items-center gap-1" data-part="fav">
+                    <svg class="w-3 h-3 fill-current text-amber-500" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    Đã Đánh Dấu
+                </button>
+            </div>
+
+            <!-- Search box -->
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Tìm nhanh câu hỏi, từ khóa..." class="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50">
+            </div>
+        </div>
+
+        <!-- ================= MODE 1: LIST VIEW ================= -->
+        <section id="mode-list" class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <span id="list-count-label" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Đang hiển thị: 86 câu</span>
+                <div class="flex gap-2">
+                    <button onclick="toggleAllAnswers(true)" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-all">Hiện tất cả đáp án</button>
+                    <button onclick="toggleAllAnswers(false)" class="text-xs font-bold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-all">Ẩn tất cả</button>
+                </div>
+            </div>
+
+            <!-- List of Questions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="questions-container">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- ================= MODE 2: FLASHCARDS ================= -->
+        <section id="mode-flashcards" class="hidden flex-col items-center justify-center py-6 gap-6 max-w-2xl mx-auto w-full">
+            <div class="text-center">
+                <span class="text-xs font-bold text-slate-400 tracking-wider uppercase">Thẻ số <span id="card-index-indicator">1</span> / <span id="card-total-indicator">86</span></span>
+                <h3 class="text-sm font-semibold text-indigo-600 mt-1" id="card-part-indicator">PHẦN I: KHÁI QUÁT CHUNG</h3>
+            </div>
+
+            <!-- 3D Card Object Container -->
+            <div class="w-full h-80 perspective-1000 cursor-pointer" onclick="flipCard()">
+                <div id="flashcard-inner" class="relative w-full h-full preserve-3d transition-transform duration-500 rounded-3xl shadow-xl border border-slate-200 bg-white">
+                    
+                    <!-- Front Side (Question) -->
+                    <div class="absolute inset-0 w-full h-full backface-hidden p-8 flex flex-col justify-between rounded-3xl bg-gradient-to-br from-white to-slate-50">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1">
+                                CÂU HỎI <span id="card-easy-badge" class="hidden bg-emerald-500 text-white text-[9px] px-1.5 py-0.5 rounded-full">DỄ & NGẮN ⚡</span>
+                            </span>
+                            <button onclick="toggleCardFavorite(event)" class="text-slate-300 hover:text-amber-500 transition-colors">
+                                <svg class="w-6 h-6 fill-current" id="card-fav-icon" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </button>
+                        </div>
+                        <div class="my-auto text-center px-4">
+                            <p class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug" id="card-question-text">Đang tải...</p>
+                        </div>
+                        <div class="text-center text-xs text-slate-400 font-medium">
+                            Chạm hoặc nhấn phím <span class="bg-slate-200 px-1.5 py-0.5 rounded text-slate-600 font-bold">Space</span> để lật xem đáp án
+                        </div>
+                    </div>
+
+                    <!-- Back Side (Answer) -->
+                    <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 p-8 flex flex-col justify-between rounded-3xl bg-slate-900 text-white">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">ĐÁP ÁN CHUẨN</span>
+                        </div>
+                        <div class="my-auto text-center px-4">
+                            <p class="text-lg sm:text-xl font-medium text-emerald-300 leading-relaxed" id="card-answer-text">Đang tải...</p>
+                        </div>
+                        <div class="text-center text-xs text-slate-400 font-medium">
+                            Chạm lại để quay về mặt câu hỏi
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Card Controls -->
+            <div class="flex flex-col gap-4 w-full">
+                <!-- Self-assessment Spaced Repetition Buttons -->
+                <div class="flex gap-3 justify-center">
+                    <button onclick="markCardMastery(false)" class="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-3 px-4 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-2xl shadow-sm transition-all text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Chưa thuộc
+                    </button>
+                    <button onclick="markCardMastery(true)" class="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-3 px-4 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 font-bold rounded-2xl shadow-sm transition-all text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Đã thuộc bài
+                    </button>
+                </div>
+
+                <!-- Next/Prev slide buttons -->
+                <div class="flex justify-between items-center px-4 mt-2">
+                    <button onclick="prevCard()" class="flex items-center gap-1.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                        Câu trước
+                    </button>
+                    <button onclick="nextCard()" class="flex items-center gap-1.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
+                        Câu tiếp theo
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MODE 3: SMART QUIZ ================= -->
+        <section id="mode-quiz" class="hidden flex-col max-w-2xl mx-auto w-full gap-6">
+            <!-- Status & Score Display -->
+            <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-6 rounded-3xl shadow-lg flex justify-between items-center">
+                <div>
+                    <span class="text-xs font-bold text-indigo-300 uppercase tracking-wider">Trắc Nghiệm Tương Tác</span>
+                    <h2 class="text-lg font-bold">Kiểm Tra Kiến Thức</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-300">Điểm số hiện tại</p>
+                    <p class="text-2xl font-black text-emerald-400" id="quiz-score-display">0 / 0</p>
+                </div>
+            </div>
+
+            <!-- NEW: QUIZ CUSTOM CONFIGURATION PANEL -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col gap-4">
+                <h3 class="text-xs font-bold text-slate-800 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Cài đặt bài ôn tập trắc nghiệm
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <!-- 1. Question Range -->
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">1. Phạm vi câu hỏi:</span>
+                        <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
+                            <button onclick="setQuizRange('all')" id="btn-range-all" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">
+                                Toàn bộ (86)
+                            </button>
+                            <button onclick="setQuizRange('easy')" id="btn-range-easy" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">
+                                Dễ & Ngắn (50)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Shuffle Questions Toggle -->
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">2. Thứ tự câu hỏi:</span>
+                        <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
+                            <button onclick="setQuizShuffleQuestions(true)" id="btn-q-shuffle-true" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">
+                                Ngẫu nhiên (Đảo)
+                            </button>
+                            <button onclick="setQuizShuffleQuestions(false)" id="btn-q-shuffle-false" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">
+                                Tuần tự (1-86)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Shuffle Answers Toggle -->
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">3. Xáo trộn đáp án:</span>
+                        <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
+                            <button onclick="setQuizShuffleAnswers(true)" id="btn-a-shuffle-true" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">
+                                Đảo vị trí (A-D)
+                            </button>
+                            <button onclick="setQuizShuffleAnswers(false)" id="btn-a-shuffle-false" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">
+                                Cố định (A Đúng)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Quiz Question Card -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+                <div>
+                    <span class="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide" id="quiz-question-part">PHẦN I</span>
+                    <h3 class="text-xl font-bold text-slate-800 mt-3 leading-snug" id="quiz-question-text">Câu hỏi trắc nghiệm sẽ hiển thị ở đây?</h3>
+                </div>
+
+                <!-- 4 Options Grid -->
+                <div class="flex flex-col gap-3" id="quiz-options-container">
+                    <!-- Dynamically populated options buttons -->
+                </div>
+
+                <!-- Explanation / Feedback Box -->
+                <div id="quiz-feedback-box" class="hidden p-4 rounded-2xl flex items-start gap-3 transition-all">
+                    <!-- Dynamic feedback content -->
+                </div>
+
+                <!-- Control Buttons inside Quiz -->
+                <div class="flex justify-between items-center gap-4">
+                    <button onclick="resetQuiz()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-xl transition-all">
+                        Làm lại từ đầu
+                    </button>
+                    <button id="quiz-next-btn" onclick="handleNextQuizClick()" class="hidden items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-md transition-all text-sm">
+                        Câu tiếp theo
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Custom Notification Modal (Replacement for window.alert) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col items-center text-center gap-4">
+            <div id="modal-icon-container" class="bg-indigo-50 text-indigo-600 p-3 rounded-full">
+                <!-- SVG Icon populated dynamically -->
+            </div>
+            <h3 id="modal-title" class="text-lg font-bold text-slate-900">Thông báo</h3>
+            <p id="modal-desc" class="text-sm text-slate-500 leading-relaxed">Nội dung thông báo chi tiết.</p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all text-sm shadow-md">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Embedded Complete 86 Q&A Database (with exactly 50 curated short/easy items marked with 'easy: true') -->
+    <script>
+        const QUESTIONS_DATABASE = [
+            // PART 1
+            { id: 1, part: "Phần I", easy: true, question: "Thuật ngữ “Kinh tế chính trị” lần đầu tiên được sử dụng bởi ai?", answer: "Antoine de Montchrestien (năm 1615)." },
+            { id: 2, part: "Phần I", easy: true, question: "Đại diện tiêu biểu nhất của trường phái Kinh tế chính trị cổ điển Anh là ai?", answer: "William Petty, Adam Smith và David Ricardo." },
+            { id: 3, part: "Phần I", easy: true, question: "Tác phẩm nổi tiếng “Tư bản” là công trình nghiên cứu vĩ đại của ai?", answer: "Karl Marx (Các Mác)." },
+            { id: 4, part: "Phần I", question: "Đối tượng nghiên cứu của Kinh tế chính trị Mác – Lênin là gì?", answer: "Các quan hệ xã hội của sản xuất và trao đổi trong phương thức sản xuất (trọng tâm là quan hệ sản xuất)." },
+            { id: 5, part: "Phần I", question: "Vai trò quan trọng nhất của môn Kinh tế chính trị đối với sinh viên là gì?", answer: "Cung cấp cơ sở khoa học để hình thành thế giới quan duy vật biện chứng và tư duy kinh tế khoa học sâu sắc." },
+            { id: 6, part: "Phần I", question: "Ý nghĩa thực tiễn cốt lõi của việc học môn Kinh tế chính trị là gì?", answer: "Giúp người học nhận thức sâu sắc các quy luật kinh tế khách quan để vận dụng hiệu quả vào thực tế." },
+            { id: 7, part: "Phần I", easy: true, question: "Kinh tế chính trị Mác – Lênin thuộc hệ thống khoa học nào?", answer: "Hệ thống các khoa học xã hội." },
+            { id: 8, part: "Phần I", easy: true, question: "Trường phái kinh tế đầu tiên nghiên cứu một cách hệ thống về kinh tế là gì?", answer: "Chủ nghĩa trọng thương (Mercantilism)." },
+            { id: 9, part: "Phần I", easy: true, question: "Ai là đại diện tiêu biểu nhất của trường phái Trọng nông?", answer: "François Quesnay." },
+            { id: 10, part: "Phần I", easy: true, question: "Tác giả của tác phẩm kinh điển “Sự giàu có của các quốc gia” là ai?", answer: "Adam Smith (xuất bản năm 1776)." },
+            { id: 11, part: "Phần I", easy: true, question: "Ai là những người phát triển học thuyết giá trị lao động trước Karl Marx?", answer: "William Petty, Adam Smith và David Ricardo." },
+            { id: 12, part: "Phần I", question: "Quan hệ sản xuất gồm những bộ phận cấu thành nào?", answer: "Quan hệ sở hữu tư liệu sản xuất (quyết định), quan hệ tổ chức quản lý và quan hệ phân phối." },
+            { id: 13, part: "Phần I", easy: true, question: "Phương pháp nghiên cứu chủ yếu của Kinh tế chính trị Mác – Lênin là gì?", answer: "Phương pháp trừu tượng hóa khoa học." },
+            { id: 14, part: "Phần I", easy: true, question: "Theo học thuyết Mác, giá trị thặng dư là gì?", answer: "Bộ phận giá trị dôi ra ngoài giá trị sức lao động do công nhân làm thuê tạo ra và bị nhà tư bản chiếm đoạt." },
+            { id: 15, part: "Phần I", easy: true, question: "Quy luật kinh tế cơ bản của chủ nghĩa tư bản là quy luật nào?", answer: "Quy luật giá trị thặng dư." },
+            { id: 16, part: "Phần I", question: "Vai trò của Kinh tế chính trị đối với việc hoạch định chính sách là gì?", answer: "Cung cấp luận cứ khoa học để hoạch định chính sách kinh tế phù hợp quy luật khách quan." },
+            { id: 17, part: "Phần I", easy: true, question: "Lực lượng sản xuất gồm những yếu tố nào?", answer: "Tư liệu sản xuất và người lao động." },
+            { id: 18, part: "Phần I", easy: true, question: "Cơ sở tồn tại và phát triển của mọi xã hội loài người là gì?", answer: "Sản xuất vật chất." },
+            { id: 19, part: "Phần I", easy: true, question: "Quy luật giá trị yêu cầu việc sản xuất và trao đổi phải theo?", answer: "Hao phí lao động xã hội cần thiết." },
+            { id: 20, part: "Phần I", question: "Cạnh tranh tự do dưới chủ nghĩa tư bản tất yếu dẫn đến?", answer: "Tích tụ, tập trung tư bản và hình thành các tổ chức độc quyền." },
+            { id: 21, part: "Phần I", question: "Mục đích tối cao của việc tích lũy tư bản là gì?", answer: "Tái sản xuất mở rộng, tăng cường bóc lột và nâng cao khả năng cạnh tranh." },
+            { id: 22, part: "Phần I", easy: true, question: "Chủ nghĩa tư bản độc quyền xuất hiện vào thời gian nào?", answer: "Cuối thế kỷ XIX - đầu thế kỷ XX." },
+            { id: 23, part: "Phần I", easy: true, question: "Lenin phân tích chủ nghĩa tư bản độc quyền trong tác phẩm nào?", answer: "Tác phẩm 'Chủ nghĩa đế quốc, giai đoạn tột cùng của chủ nghĩa tư bản' (1916)." },
+            { id: 24, part: "Phần I", question: "Ý nghĩa thực tiễn của việc nghiên cứu môn học này?", answer: "Hiểu sâu sắc và vận dụng đúng đắn chính sách phát triển kinh tế thị trường định hướng XHCN." },
+            { id: 25, part: "Phần I", easy: true, question: "Trong quan hệ sản xuất, quan hệ phân phối phụ thuộc vào?", answer: "Quan hệ sở hữu đối với tư liệu sản xuất." },
+            { id: 26, part: "Phần I", question: "Sức lao động trở thành hàng hóa khi nào?", answer: "Khi người lao động tự do về thân thể và bị tước đoạt hết tư liệu sản xuất." },
+
+            // PART 2
+            { id: 27, part: "Phần II", easy: true, question: "Hàng hóa có mấy thuộc tính cơ bản?", answer: "Hai thuộc tính (Giá trị sử dụng và Giá trị)." },
+            { id: 28, part: "Phần II", easy: true, question: "Hai thuộc tính của hàng hóa cụ thể là gì?", answer: "Giá trị sử dụng (công dụng) và Giá trị (lao động trừu tượng kết tinh)." },
+            { id: 29, part: "Phần II", easy: true, question: "Giá trị của hàng hóa do yếu tố nào quyết định?", answer: "Lao động trừu tượng của người sản xuất kết tinh trong hàng hóa." },
+            { id: 30, part: "Phần II", question: "Nguồn gốc sâu xa dẫn đến sự ra đời của tiền tệ là gì?", answer: "Sự phát triển lâu dài của sản xuất, lưu thông hàng hóa và các hình thái giá trị." },
+            { id: 31, part: "Phần II", easy: true, question: "Chức năng thước đo giá trị của tiền tệ dùng để làm gì?", answer: "Đo lường và biểu hiện giá trị của tất cả các hàng hóa khác." },
+            { id: 32, part: "Phần II", easy: true, question: "Chức năng phương tiện lưu thông của tiền tệ đóng vai trò gì?", answer: "Làm môi giới trung gian trong quá trình trao đổi mua bán hàng hóa." },
+            { id: 33, part: "Phần II", question: "Yêu cầu đối với chức năng phương tiện cất trữ của tiền là gì?", answer: "Tiền phải rút khỏi lưu thông và phải là tiền vàng hoặc vật phẩm có giá trị thực chất." },
+            { id: 34, part: "Phần II", question: "Chức năng tiền tệ thế giới được dùng trong hoạt động nào?", answer: "Thanh toán quốc tế và chuyển dịch tư bản giữa các quốc gia." },
+            { id: 35, part: "Phần II", easy: true, question: "Lao động cụ thể tạo ra thuộc tính gì?", answer: "Giá trị sử dụng của hàng hóa." },
+            { id: 36, part: "Phần II", easy: true, question: "Lao động trừu tượng tạo ra thuộc tính gì?", answer: "Giá trị của hàng hóa." },
+            { id: 37, part: "Phần II", easy: true, question: "Hình thái giá trị trao đổi phát triển qua mấy giai đoạn?", answer: "4 giai đoạn (Giản đơn -> Mở rộng -> Chung của giá trị -> Tiền tệ)." },
+            { id: 38, part: "Phần II", question: "Hao phí lao động xã hội cần thiết thực chất là gì?", answer: "Thời gian lao động trung bình cần thiết để sản xuất ra một sản phẩm trong điều kiện bình thường." },
+            { id: 39, part: "Phần II", question: "Cạnh tranh thị trường mang lại tác động gì?", answer: "Buộc giá cả xoay quanh giá trị; kích thích cải tiến kỹ thuật và gây phân hóa giàu nghèo." },
+            { id: 40, part: "Phần II", easy: true, question: "Khi Cung lớn hơn Cầu (Cung > Cầu) thì giá cả thị trường sẽ?", answer: "Giảm xuống thấp hơn giá trị hàng hóa." },
+            { id: 41, part: "Phần II", easy: true, question: "Hàng hóa đặc biệt dưới chủ nghĩa tư bản là gì?", answer: "Hàng hóa sức lao động." },
+            { id: 42, part: "Phần II", question: "Để sức lao động biến thành hàng hóa cần điều kiện gì?", answer: "Người lao động được tự do thân thể và không có tư liệu sản xuất." },
+            { id: 43, part: "Phần II", question: "Giá trị của hàng hóa sức lao động do cái gì quyết định?", answer: "Giá trị các tư liệu sinh hoạt cần thiết để duy trì sức khỏe, cuộc sống của người công nhân và gia đình." },
+            { id: 44, part: "Phần II", easy: true, question: "Giá cả của hàng hóa thực chất là gì?", answer: "Biểu hiện bằng tiền của giá trị hàng hóa." },
+            { id: 45, part: "Phần II", question: "Thị trường được định nghĩa cơ bản là gì?", answer: "Nơi diễn ra các hoạt động giao dịch, mua bán và tổng hòa các mối quan hệ kinh tế." },
+
+            // PART 3
+            { id: 46, part: "Phần III", easy: true, question: "Nguồn gốc thực tế duy nhất sinh ra giá trị thặng dư là?", answer: "Lao động không công của người công nhân làm thuê tạo ra." },
+            { id: 47, part: "Phần III", easy: true, question: "Tư bản bất biến (c) là bộ phận tư bản tồn tại dưới hình thức nào?", answer: "Tư liệu sản xuất (máy móc, nhà xưởng, nguyên liệu...). Giá trị được bảo tồn không đổi lượng." },
+            { id: 48, part: "Phần III", easy: true, question: "Tư bản khả biến (v) là bộ phận tư bản dùng để làm gì?", answer: "Thuê sức lao động (trả tiền lương). Bộ phận này tự tăng lên về giá trị." },
+            { id: 49, part: "Phần III", easy: true, question: "Tỷ suất giá trị thặng dư (m') phản ánh điều gì?", answer: "Trình độ bóc lột của nhà tư bản đối với công nhân làm thuê." },
+            { id: 50, part: "Phần III", easy: true, question: "Công thức xác định tỷ suất giá trị thặng dư (m') là gì?", answer: "m' = (m / v) * 100%." },
+            { id: 51, part: "Phần III", easy: true, question: "Công thức tổng quát biểu thị giá trị hàng hóa (W) là gì?", answer: "W = c + v + m." },
+            { id: 52, part: "Phần III", easy: true, question: "Giá trị thặng dư tuyệt đối được tạo ra bằng cách nào?", answer: "Kéo dài ngày lao động trong khi thời gian lao động tất yếu không đổi." },
+            { id: 53, part: "Phần III", easy: true, question: "Giá trị thặng dư tương đối được tạo ra bằng cách nào?", answer: "Rút ngắn thời gian lao động tất yếu bằng cách tăng năng suất lao động xã hội." },
+            { id: 54, part: "Phần III", question: "Tích lũy tư bản thực chất là gì?", answer: "Sự chuyển hóa một phần giá trị thặng dư thành tư bản để tái sản xuất mở rộng." },
+            { id: 55, part: "Phần III", question: "Quá trình tích tụ tư bản diễn ra như thế nào?", answer: "Tăng quy mô tư bản cá biệt bằng cách tư bản hóa một phần giá trị thặng dư tại xí nghiệp." },
+            { id: 56, part: "Phần III", question: "Quá trình tập trung tư bản diễn ra như thế nào?", answer: "Hợp nhất các tư bản cá biệt sẵn có thành một tư bản lớn hơn." },
+            { id: 57, part: "Phần III", easy: true, question: "Bản chất thực tế của tiền lương dưới chế độ TBCN là gì?", answer: "Giá cả bằng tiền của hàng hóa sức lao động." },
+            { id: 58, part: "Phần III", easy: true, question: "Công thức tính tỷ suất lợi nhuận (p') là gì?", answer: "p' = (m / [c + v]) * 100%." },
+            { id: 59, part: "Phần III", question: "Quá trình tích lũy tư bản làm gia tăng những yếu tố nào?", answer: "Quy mô tư bản, cấu tạo hữu cơ (c/v), năng suất lao động và nạn thất nghiệp." },
+            { id: 60, part: "Phần III", question: "Thất nghiệp trong chủ nghĩa tư bản là do nguyên nhân gì?", answer: "Sự tăng nhanh của cấu tạo hữu cơ (c/v) khiến cầu sức lao động tăng chậm hơn cung." },
+            { id: 61, part: "Phần III", easy: true, question: "Lợi nhuận thương nghiệp thực chất bắt nguồn từ?", answer: "Một phần giá trị thặng dư tạo ra trong sản xuất được nhượng lại cho thương nhân." },
+            { id: 62, part: "Phần III", easy: true, question: "Lợi tức (z) thực chất là gì?", answer: "Một phần của lợi nhuận bình quân mà nhà tư bản đi vay phải trả cho người cho vay." },
+            { id: 63, part: "Phần III", question: "Địa tô tư bản chủ nghĩa bản chất là gì?", answer: "Phần giá trị thặng dư siêu ngạch ngoài lợi nhuận bình quân mà nhà tư bản thuê đất phải trả cho địa chủ." },
+            { id: 64, part: "Phần III", question: "Địa tô chênh lệch phát sinh do nguyên nhân nào?", answer: "Do tính chất độc quyền kinh doanh trên đất tốt hoặc đất có vị trí thuận lợi." },
+            { id: 65, part: "Phần III", question: "Địa tô tuyệt đối phát sinh do nguyên nhân nào?", answer: "Do độc quyền tư hữu đất đai tuyệt đối ngăn cản dòng chảy tư bản tự do vào nông nghiệp." },
+            { id: 66, part: "Phần III", question: "Quá trình tái sản xuất mở rộng do hoạt động nào quyết định?", answer: "Quá trình tích lũy tư bản liên tục quyết định." },
+
+            // PART 4
+            { id: 67, part: "Phần IV", easy: true, question: "Chủ nghĩa tư bản độc quyền hình thành vào thời điểm nào?", answer: "Cuối thế kỷ XIX - đầu thế kỷ XX." },
+            { id: 68, part: "Phần IV", easy: true, question: "Đặc điểm kinh tế thứ nhất của CNTB độc quyền là?", answer: "Sự thống trị của các tổ chức độc quyền lớn do tập trung sản xuất cao độ." },
+            { id: 69, part: "Phần IV", easy: true, question: "Đặc điểm kinh tế thứ hai của CNTB độc quyền là?", answer: "Sự hình thành Tư bản tài chính và hệ thống tài phiệt." },
+            { id: 70, part: "Phần IV", easy: true, question: "Đặc điểm kinh tế thứ ba của CNTB độc quyền là?", answer: "Xuất khẩu tư bản trở thành đặc trưng hàng đầu thay vì xuất khẩu hàng hóa." },
+            { id: 71, part: "Phần IV", question: "Đặc điểm kinh tế thứ tư của CNTB độc quyền là?", answer: "Sự phân chia thị trường thế giới giữa các liên minh độc quyền quốc tế." },
+            { id: 72, part: "Phần IV", easy: true, question: "Tư bản tài chính là sự hòa hợp giữa?", answer: "Tư bản độc quyền công nghiệp và tư bản độc quyền ngân hàng." },
+            { id: 73, part: "Phần IV", easy: true, question: "Chủ nghĩa đế quốc thực chất là gì?", answer: "Giai đoạn độc quyền và phát triển tột cùng của chủ nghĩa tư bản." },
+            { id: 74, part: "Phần IV", question: "Lợi nhuận độc quyền cao siêu ngạch có được nhờ công cụ nào?", answer: "Nhờ thiết lập giá cả độc quyền (mua rẻ nguyên liệu, bán đắt thành phẩm)." },
+            { id: 75, part: "Phần IV", question: "Nhà nước tư sản can thiệp sâu sắc vào kinh tế nhằm mục đích gì?", answer: "Để bảo vệ lợi ích tối cao của các tập đoàn tư bản độc quyền và duy trì hệ thống." },
+            { id: 76, part: "Phần IV", question: "Thế nào là chủ nghĩa tư bản độc quyền nhà nước?", answer: "Sự kết hợp sức mạnh của các tổ chức độc quyền tư nhân với bộ máy nhà nước thành một thể thống nhất." },
+            { id: 77, part: "Phần IV", question: "Tác động tiêu cực lớn nhất của độc quyền là gì?", answer: "Kìm hãm tiến bộ kỹ thuật để duy trì vị thế áp đặt giá độc quyền cao." },
+            { id: 78, part: "Phần IV", easy: true, question: "Mục đích sâu xa của hoạt động xuất khẩu tư bản là gì?", answer: "Chiếm đoạt giá trị thặng dư tối đa tại nước nhập khẩu." },
+            { id: 79, part: "Phần IV", question: "Xu thế toàn cầu hóa kinh tế gắn liền với sự phát triển của?", answer: "Lực lượng sản xuất dưới tác động của cuộc cách mạng khoa học công nghệ." },
+            { id: 80, part: "Phần IV", question: "Nguồn gốc gây ra khủng hoảng kinh tế chu kỳ dưới CNTB là do?", answer: "Mâu thuẫn cơ bản của chủ nghĩa tư bản giữa LLSX xã hội hóa và QHSX tư hữu." },
+            { id: 81, part: "Phần IV", question: "Mâu thuẫn cơ bản của phương thức sản xuất tư bản chủ nghĩa là gì?", answer: "Mâu thuẫn giữa lực lượng sản xuất xã hội hóa cao với quan hệ sản xuất tư hữu tư bản." },
+
+            // PART 5
+            { id: 82, part: "Phần V", question: "Đặc điểm phân phối trong nền KTTT định hướng XHCN Việt Nam?", answer: "Đa dạng hóa phân phối, cốt lõi là phân phối theo kết quả lao động và hiệu quả kinh tế." },
+            { id: 83, part: "Phần V", easy: true, question: "Thành phần kinh tế nào giữ vai trò chủ đạo ở Việt Nam?", answer: "Kinh tế nhà nước." },
+            { id: 84, part: "Phần V", easy: true, question: "Vị trí của Kinh tế tư nhân ở Việt Nam được xác định là gì?", answer: "Là một động lực quan trọng của nền kinh tế." },
+            { id: 85, part: "Phần V", question: "Nhà nước Việt Nam điều tiết nền kinh tế thị trường bằng công cụ nào?", answer: "Pháp luật, chiến lược phát triển, quy hoạch, kế hoạch và các chính sách điều tiết vĩ mô." },
+            { id: 86, part: "Phần V", easy: true, question: "Mối quan hệ biện chứng giữa LLSX và QHSX là gì?", answer: "LLSX quyết định sự thay đổi của QHSX; QHSX phải phù hợp với trình độ phát triển của LLSX." }
+        ];
+
+        // Application State
+        let currentMode = 'list';
+        let activePartFilter = 'easy'; // Set DEFAULT filter to Easy 50 for quick study!
+        let searchQuery = '';
+        let favorites = JSON.parse(localStorage.getItem('ktct_favorites') || '[]');
+        let learnedList = JSON.parse(localStorage.getItem('ktct_learned') || '[]');
+        
+        // Flashcard State
+        let currentCardIndex = 0;
+        let isCardFlipped = false;
+        let filteredCards = [...QUESTIONS_DATABASE];
+
+        // Quiz Config State (New Interactive Parameters)
+        let quizRange = 'easy';            // 'all' or 'easy'
+        let quizShuffleQuestions = true;   // true: random order, false: sequential order (1 -> end)
+        let quizShuffleAnswers = true;     // true: shuffle options, false: A is always correct
+        
+        // Quiz Running State
+        let currentQuizQuestion = null;
+        let quizScore = 0;
+        let quizTotal = 0;
+        let hasAnsweredQuiz = false;
+        let sequentialPool = [];           // active pool of quiz questions
+        let quizSequentialIndex = 0;       // tracks sequential progress in the active pool
+
+        // Initialize App on DOM Ready
+        window.onload = function() {
+            renderList();
+            updateGlobalProgress();
+            // Keyboard Listener for Flashcard Flipping (Spacebar) and Navigation
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+        };
+
+        // Switch Screen Modes
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Toggle active classes on tabs
+            const tabs = ['list', 'flashcards', 'quiz'];
+            tabs.forEach(t => {
+                const tabBtn = document.getElementById(`tab-${t}`);
+                if (t === mode) {
+                    tabBtn.className = "flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 bg-white text-indigo-700 shadow-sm";
+                } else {
+                    tabBtn.className = "flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900";
+                }
+            });
+
+            // Toggle screens visibility
+            document.getElementById('mode-list').classList.toggle('hidden', mode !== 'list');
+            document.getElementById('mode-list').classList.toggle('flex', mode === 'list');
+            document.getElementById('mode-flashcards').classList.toggle('hidden', mode !== 'flashcards');
+            document.getElementById('mode-flashcards').classList.toggle('flex', mode === 'flashcards');
+            document.getElementById('mode-quiz').classList.toggle('hidden', mode !== 'quiz');
+            document.getElementById('mode-quiz').classList.toggle('flex', mode === 'quiz');
+
+            // Hide/Show filter zone depending on mode (not needed for Quiz)
+            document.getElementById('filter-zone').classList.toggle('hidden', mode === 'quiz');
+
+            if (mode === 'flashcards') {
+                resetFlashcardDeck();
+            } else if (mode === 'quiz') {
+                resetQuiz();
+            } else {
+                renderList();
+            }
+        }
+
+        // Get filtered dataset based on search and part filters
+        function getFilteredData() {
+            return QUESTIONS_DATABASE.filter(q => {
+                const matchesPart = activePartFilter === 'all' || 
+                                    (activePartFilter === 'easy' && q.easy) || 
+                                    (activePartFilter !== 'easy' && q.part === activePartFilter);
+                const matchesFavorite = activePartFilter === 'fav' ? favorites.includes(q.id) : true;
+                const queryClean = searchQuery.toLowerCase().trim();
+                const matchesSearch = q.question.toLowerCase().includes(queryClean) || q.answer.toLowerCase().includes(queryClean);
+                return matchesPart && matchesFavorite && matchesSearch;
+            });
+        }
+
+        // --- MODE 1: LIST VIEW LOGIC ---
+        function renderList() {
+            const container = document.getElementById('questions-container');
+            const data = getFilteredData();
+            
+            document.getElementById('list-count-label').innerText = `Đang hiển thị: ${data.length} câu`;
+            
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 flex flex-col items-center text-center gap-3">
+                        <div class="bg-slate-100 text-slate-400 p-4 rounded-full">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-slate-700">Không tìm thấy kết quả nào</h4>
+                        <p class="text-xs text-slate-400 max-w-xs">Thử đổi từ khóa hoặc bộ lọc chủ đề khác xem sao bạn nhé!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = data.map(q => {
+                const isFav = favorites.includes(q.id);
+                const isLearned = learnedList.includes(q.id);
+                
+                return `
+                    <div class="bg-white border ${isLearned ? 'border-emerald-200 bg-emerald-50/10' : 'border-slate-200'} rounded-2xl p-5 hover:shadow-md transition-all flex flex-col justify-between gap-4 relative group">
+                        
+                        <!-- Card Header -->
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <span class="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide mr-2">${q.part}</span>
+                                ${q.easy ? `<span class="bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide mr-2">⚡ Dễ & Ngắn</span>` : ''}
+                                <span class="text-slate-400 text-xs font-semibold">Câu ${q.id}</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-2">
+                                <!-- Check learned button -->
+                                <button onclick="toggleItemLearned(${q.id})" class="p-1.5 rounded-lg transition-colors ${isLearned ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-50 text-slate-300 hover:text-emerald-600 hover:bg-emerald-50'}" title="${isLearned ? 'Đã thuộc lòng' : 'Đánh dấu đã thuộc'}">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                </button>
+                                
+                                <!-- Bookmark/Favorite -->
+                                <button onclick="toggleItemFavorite(${q.id})" class="p-1.5 rounded-lg transition-colors ${isFav ? 'bg-amber-100 text-amber-700' : 'bg-slate-50 text-slate-300 hover:text-amber-500 hover:bg-amber-50'}">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question Body -->
+                        <div>
+                            <p class="font-bold text-slate-800 text-base leading-snug">${q.question}</p>
+                        </div>
+
+                        <!-- Answer Body (Collapsible) -->
+                        <div class="border-t border-slate-100 pt-3">
+                            <button onclick="toggleAnswerVisibility(${q.id})" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 focus:outline-none mb-2">
+                                <span id="eye-icon-${q.id}"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></span>
+                                <span id="btn-text-${q.id}">Hiện đáp án</span>
+                            </button>
+                            <div id="answer-text-${q.id}" class="hidden text-sm text-slate-600 font-semibold pl-2 border-l-2 border-indigo-400 py-1 transition-all">
+                                ${q.answer}
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle Single Answer visibility in List
+        function toggleAnswerVisibility(id) {
+            const answerEl = document.getElementById(`answer-text-${id}`);
+            const btnText = document.getElementById(`btn-text-${id}`);
+            const eyeIcon = document.getElementById(`eye-icon-${id}`);
+            
+            const isHidden = answerEl.classList.contains('hidden');
+            
+            if (isHidden) {
+                answerEl.classList.remove('hidden');
+                btnText.innerText = "Ẩn đáp án";
+                eyeIcon.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>`;
+            } else {
+                answerEl.classList.add('hidden');
+                btnText.innerText = "Hiện đáp án";
+                eyeIcon.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>`;
+            }
+        }
+
+        // Show or Hide All Answers globally on list view
+        function toggleAllAnswers(show) {
+            const data = getFilteredData();
+            data.forEach(q => {
+                const answerEl = document.getElementById(`answer-text-${q.id}`);
+                const btnText = document.getElementById(`btn-text-${q.id}`);
+                if (!answerEl) return;
+                
+                if (show) {
+                    answerEl.classList.remove('hidden');
+                    btnText.innerText = "Ẩn đáp án";
+                } else {
+                    answerEl.classList.add('hidden');
+                    btnText.innerText = "Hiện đáp án";
+                }
+            });
+        }
+
+        // --- DECK FILTERS ---
+        function filterPart(part) {
+            activePartFilter = part;
+            
+            // Toggle active style on part buttons
+            const buttons = document.querySelectorAll('.part-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-part') === part) {
+                    if (part === 'easy') {
+                        btn.className = "part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-emerald-600 text-white shadow-sm border border-emerald-600";
+                    } else if (part === 'fav') {
+                        btn.className = "part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-amber-500 text-white shadow-sm border border-amber-500";
+                    } else {
+                        btn.className = "part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                    }
+                } else {
+                    if (btn.getAttribute('data-part') === 'easy') {
+                        btn.className = "part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200";
+                    } else if (btn.getAttribute('data-part') === 'fav') {
+                        btn.className = "part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200";
+                    } else {
+                        btn.className = "part-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-slate-600";
+                    }
+                }
+            });
+
+            if (currentMode === 'list') {
+                renderList();
+            } else if (currentMode === 'flashcards') {
+                resetFlashcardDeck();
+            }
+        }
+
+        function filterFavorite() {
+            filterPart('fav');
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('search-input').value;
+            if (currentMode === 'list') {
+                renderList();
+            } else if (currentMode === 'flashcards') {
+                resetFlashcardDeck();
+            }
+        }
+
+        // --- BOOKMARK & MASTERY PERSISTENCE ---
+        function toggleItemFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('ktct_favorites', JSON.stringify(favorites));
+            
+            if (currentMode === 'list') {
+                renderList();
+            }
+        }
+
+        // Toggle item learned state
+        function toggleItemLearned(id) {
+            const index = learnedList.indexOf(id);
+            if (index > -1) {
+                learnedList.splice(index, 1);
+            } else {
+                learnedList.push(id);
+            }
+            localStorage.setItem('ktct_learned', JSON.stringify(learnedList));
+            updateGlobalProgress();
+            
+            if (currentMode === 'list') {
+                renderList();
+            }
+        }
+
+        function updateGlobalProgress() {
+            const total = QUESTIONS_DATABASE.length;
+            const learnedCount = learnedList.length;
+            const percent = Math.round((learnedCount / total) * 100);
+            
+            document.getElementById('progress-percent').innerText = `${percent}%`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            document.getElementById('learned-count').innerText = learnedCount;
+            document.getElementById('total-count').innerText = total;
+        }
+
+        // --- MODE 2: FLASHCARD 3D DECK LOGIC ---
+        function resetFlashcardDeck() {
+            filteredCards = getFilteredData();
+            currentCardIndex = 0;
+            isCardFlipped = false;
+            
+            const innerCard = document.getElementById('flashcard-inner');
+            innerCard.classList.remove('rotate-y-180');
+
+            if (filteredCards.length === 0) {
+                document.getElementById('card-question-text').innerText = "Danh sách thẻ trống! Hãy thử đổi bộ lọc hoặc thêm câu hỏi yêu thích.";
+                document.getElementById('card-answer-text').innerText = "Không có dữ liệu.";
+                document.getElementById('card-index-indicator').innerText = "0";
+                document.getElementById('card-total-indicator').innerText = "0";
+                document.getElementById('card-part-indicator').innerText = "RỖNG";
+                document.getElementById('card-easy-badge').classList.add('hidden');
+                return;
+            }
+
+            loadCardData();
+        }
+
+        function loadCardData() {
+            if (filteredCards.length === 0) return;
+            const currentCard = filteredCards[currentCardIndex];
+            
+            // Display indicator numbers
+            document.getElementById('card-index-indicator').innerText = currentCardIndex + 1;
+            document.getElementById('card-total-indicator').innerText = filteredCards.length;
+            document.getElementById('card-part-indicator').innerText = currentCard.part.toUpperCase() + ` (Câu ${currentCard.id})`;
+            
+            // Set front text and back text
+            document.getElementById('card-question-text').innerText = currentCard.question;
+            document.getElementById('card-answer-text').innerText = currentCard.answer;
+
+            // Handle easy badge
+            const easyBadge = document.getElementById('card-easy-badge');
+            if (currentCard.easy) {
+                easyBadge.classList.remove('hidden');
+            } else {
+                easyBadge.classList.add('hidden');
+            }
+
+            // Handle bookmark icon
+            const favIcon = document.getElementById('card-fav-icon');
+            if (favorites.includes(currentCard.id)) {
+                favIcon.className = "w-6 h-6 fill-current text-amber-500";
+            } else {
+                favIcon.className = "w-6 h-6 fill-current text-slate-300 hover:text-amber-500";
+            }
+        }
+
+        function flipCard() {
+            if (filteredCards.length === 0) return;
+            isCardFlipped = !isCardFlipped;
+            const innerCard = document.getElementById('flashcard-inner');
+            if (isCardFlipped) {
+                innerCard.classList.add('rotate-y-180');
+            } else {
+                innerCard.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextCard() {
+            if (filteredCards.length === 0) return;
+            currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
+            
+            // Reset flipping first to prevent looking at the next answer immediately
+            if (isCardFlipped) {
+                flipCard();
+                setTimeout(loadCardData, 200); // smooth switch during flipping back
+            } else {
+                loadCardData();
+            }
+        }
+
+        // Prev Card logic
+        function prevCard() {
+            if (filteredCards.length === 0) return;
+            currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
+            
+            if (isCardFlipped) {
+                flipCard();
+                setTimeout(loadCardData, 200);
+            } else {
+                loadCardData();
+            }
+        }
+
+        // Action when user clicks "Đã thuộc" or "Chưa thuộc" on Flashcards
+        function markCardMastery(isLearned) {
+            if (filteredCards.length === 0) return;
+            const currentCard = filteredCards[currentCardIndex];
+            
+            const indexInLearned = learnedList.indexOf(currentCard.id);
+            
+            if (isLearned) {
+                // If marked as learned
+                if (indexInLearned === -1) {
+                    learnedList.push(currentCard.id);
+                }
+            } else {
+                // If marked as unlearned/review
+                if (indexInLearned > -1) {
+                    learnedList.splice(indexInLearned, 1);
+                }
+            }
+
+            localStorage.setItem('ktct_learned', JSON.stringify(learnedList));
+            updateGlobalProgress();
+            
+            // Automatically advance to the next card with subtle notification
+            showToast(isLearned ? "Đã ghi nhận! Thẻ tiếp theo..." : "Ghi nhận cần ôn lại! Thẻ tiếp theo...", isLearned ? 'success' : 'info');
+            nextCard();
+        }
+
+        function toggleCardFavorite(event) {
+            event.stopPropagation(); // prevent card flip when clicking favorite icon
+            if (filteredCards.length === 0) return;
+            const currentCard = filteredCards[currentCardIndex];
+            toggleItemFavorite(currentCard.id);
+            loadCardData();
+        }
+
+        // Custom brief notification toast
+        function showToast(msg, type) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 right-6 px-4 py-3 rounded-2xl text-xs font-bold text-white shadow-xl z-50 transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 ${type === 'success' ? 'bg-emerald-600' : 'bg-indigo-600'}`;
+            toast.innerHTML = `
+                ${type === 'success' ? '✔' : 'ℹ'} ${msg}
+            `;
+            document.body.appendChild(toast);
+            
+            // animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            // remove after 2s
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 1800);
+        }
+
+        // Keyboard navigation for study convenience
+        function handleKeyboardShortcuts(e) {
+            if (currentMode !== 'flashcards') return;
+            if (e.code === 'Space') {
+                e.preventDefault(); // prevent scrolling
+                flipCard();
+            } else if (e.code === 'ArrowRight') {
+                nextCard();
+            } else if (e.code === 'ArrowLeft') {
+                prevCard();
+            } else if (e.code === 'Digit1') {
+                markCardMastery(false); // Key 1 for Unlearned
+            } else if (e.code === 'Digit2') {
+                markCardMastery(true);  // Key 2 for Mastered
+            }
+        }
+
+
+        // --- MODE 3: SMART QUIZ LOGIC (UPGRADED) ---
+        
+        // 1. Config Setters
+        function setQuizRange(range) {
+            quizRange = range;
+            updateQuizConfigUI();
+            resetQuiz();
+        }
+
+        function setQuizShuffleQuestions(shuffle) {
+            quizShuffleQuestions = shuffle;
+            updateQuizConfigUI();
+            resetQuiz();
+        }
+
+        function setQuizShuffleAnswers(shuffle) {
+            quizShuffleAnswers = shuffle;
+            updateQuizConfigUI();
+            resetQuiz();
+        }
+
+        // Sync Quiz Configuration Tab Buttons UI
+        function updateQuizConfigUI() {
+            // Range (All vs Easy)
+            const rangeAll = document.getElementById('btn-range-all');
+            const rangeEasy = document.getElementById('btn-range-easy');
+            if (quizRange === 'all') {
+                rangeAll.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
+                rangeEasy.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+            } else {
+                rangeAll.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+                rangeEasy.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-emerald-600 text-white shadow-sm";
+            }
+
+            // Shuffle Questions Toggle
+            const qTrue = document.getElementById('btn-q-shuffle-true');
+            const qFalse = document.getElementById('btn-q-shuffle-false');
+            if (quizShuffleQuestions) {
+                qTrue.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
+                qFalse.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+            } else {
+                qTrue.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+                qFalse.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
+            }
+
+            // Shuffle Answers Toggle
+            const aTrue = document.getElementById('btn-a-shuffle-true');
+            const aFalse = document.getElementById('btn-a-shuffle-false');
+            if (quizShuffleAnswers) {
+                aTrue.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
+                aFalse.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+            } else {
+                aTrue.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+                aFalse.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
+            }
+        }
+
+        // Reset and rebuild the Quiz state
+        function resetQuiz() {
+            quizScore = 0;
+            quizTotal = 0;
+            quizSequentialIndex = 0;
+            document.getElementById('quiz-score-display').innerText = "0 / 0";
+            
+            updateQuizConfigUI();
+
+            // Filter raw pool
+            const pool = quizRange === 'easy' 
+                ? QUESTIONS_DATABASE.filter(q => q.easy) 
+                : QUESTIONS_DATABASE;
+
+            // Make a unique pool copy
+            sequentialPool = [...pool];
+
+            // If user wants random order, shuffle the questions pool once
+            if (quizShuffleQuestions) {
+                shuffleArray(sequentialPool);
+            } else {
+                // Keep default numerical index (Câu 1, Câu 2...)
+                sequentialPool.sort((a, b) => a.id - b.id);
+            }
+
+            generateNextQuizQuestion();
+        }
+
+        // Generate and render the active question from pool
+        function generateNextQuizQuestion() {
+            hasAnsweredQuiz = false;
+            
+            // Hide feedback panel and Next button
+            document.getElementById('quiz-feedback-box').className = "hidden";
+            document.getElementById('quiz-next-btn').className = "hidden";
+
+            if (sequentialPool.length === 0) {
+                document.getElementById('quiz-question-text').innerText = "Vui lòng chọn bộ đề hợp lệ.";
+                return;
+            }
+
+            // Safe wrap-around checks
+            if (quizSequentialIndex >= sequentialPool.length) {
+                quizSequentialIndex = 0;
+                if (quizShuffleQuestions) {
+                    shuffleArray(sequentialPool);
+                }
+                showToast("Đã hoàn thành toàn bộ đề ôn tập! Bắt đầu chu kỳ mới.", "success");
+            }
+
+            currentQuizQuestion = sequentialPool[quizSequentialIndex];
+
+            // Render details
+            document.getElementById('quiz-question-part').innerHTML = `
+                ${currentQuizQuestion.part} (Câu ${currentQuizQuestion.id})
+                ${currentQuizQuestion.easy ? `<span class="ml-1 bg-emerald-500 text-white text-[9px] px-1.5 py-0.5 rounded-full">DỄ & NGẮN ⚡</span>` : ''}
+                <span class="ml-1.5 text-slate-400 font-semibold">[Học câu: ${quizSequentialIndex + 1}/${sequentialPool.length}]</span>
+            `;
+            document.getElementById('quiz-question-text').innerText = currentQuizQuestion.question;
+
+            // Generate wrong distractors
+            const distractors = [];
+            while (distractors.length < 3) {
+                const randomOther = QUESTIONS_DATABASE[Math.floor(Math.random() * QUESTIONS_DATABASE.length)];
+                if (randomOther.id !== currentQuizQuestion.id && !distractors.includes(randomOther.answer)) {
+                    distractors.push(randomOther.answer);
+                }
+            }
+
+            // Construct choices list
+            let allOptions = [];
+            if (quizShuffleAnswers) {
+                // Mode 1: Shuffle choices (Harder, standard exam)
+                allOptions = [currentQuizQuestion.answer, ...distractors];
+                shuffleArray(allOptions);
+            } else {
+                // Mode 2: FIXED answer choice order (Correct answer is ALWAYS choice A)
+                // Outstanding for super-fast spaced learning
+                allOptions = [currentQuizQuestion.answer, ...distractors];
+            }
+
+            // Render options choices inside buttons
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = allOptions.map((opt, idx) => {
+                const label = String.fromCharCode(65 + idx); // A, B, C, D
+                const isNoShuffleTrueLabel = (!quizShuffleAnswers && idx === 0) ? ' (Đúng) ' : '';
+                return `
+                    <button onclick="submitQuizAnswer('${opt.replace(/'/g, "\\'")}', this)" class="option-btn text-left p-4 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all font-semibold text-sm flex gap-4 items-start focus:outline-none">
+                        <span class="bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-lg text-xs border border-slate-200 uppercase">${label}</span>
+                        <span class="flex-1 text-slate-700 option-text">${opt}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Check selected answer correctness
+        function submitQuizAnswer(selectedAnswer, buttonElement) {
+            if (hasAnsweredQuiz) return; 
+            hasAnsweredQuiz = true;
+
+            quizTotal++;
+            const isCorrect = (selectedAnswer === currentQuizQuestion.answer);
+
+            if (isCorrect) {
+                quizScore++;
+                // Style selected button as success
+                buttonElement.className = "option-btn text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-semibold text-sm flex gap-4 items-start focus:outline-none transition-all";
+                buttonElement.querySelector('span').className = "bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-lg text-xs uppercase";
+            } else {
+                // Style selected button as error
+                buttonElement.className = "option-btn text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 font-semibold text-sm flex gap-4 items-start focus:outline-none transition-all";
+                buttonElement.querySelector('span').className = "bg-rose-500 text-white font-bold px-2 py-0.5 rounded-lg text-xs uppercase";
+
+                // Highlight correct button in the choices
+                const buttons = document.querySelectorAll('.option-btn');
+                buttons.forEach(btn => {
+                    const optText = btn.querySelector('.option-text').innerText;
+                    if (optText === currentQuizQuestion.answer) {
+                        btn.className = "option-btn text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-semibold text-sm flex gap-4 items-start focus:outline-none transition-all";
+                        btn.querySelector('span').className = "bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-lg text-xs uppercase";
+                    }
+                });
+            }
+
+            // Update scores
+            document.getElementById('quiz-score-display').innerText = `${quizScore} / ${quizTotal}`;
+
+            // Show answer feedback
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            feedbackBox.className = `flex items-start gap-3 p-4 rounded-2xl ${isCorrect ? 'bg-emerald-100/50 text-emerald-800' : 'bg-rose-100/50 text-rose-800'}`;
+            feedbackBox.innerHTML = `
+                <div class="mt-0.5">
+                    ${isCorrect 
+                        ? `<svg class="w-5 h-5 text-emerald-600 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`
+                        : `<svg class="w-5 h-5 text-rose-600 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 00-1.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>`
+                    }
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm">${isCorrect ? 'Đáp án chính xác!' : 'Chưa chính xác rồi!'}</h4>
+                    <p class="text-xs mt-1 font-medium leading-relaxed">
+                        <strong>Lý giải đáp án đúng:</strong> ${currentQuizQuestion.answer}
+                    </p>
+                </div>
+            `;
+
+            // Display Next option
+            document.getElementById('quiz-next-btn').className = "flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-md transition-all text-sm animate-pulse";
+        }
+
+        // Action when Next is clicked
+        function handleNextQuizClick() {
+            quizSequentialIndex++;
+            generateNextQuizQuestion();
+        }
+
+        // --- UTILS ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Custom Modal Utility (Replaces window.alert for sandboxed environment)
+        function showNotification(title, desc, iconSvg) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            if (iconSvg) {
+                document.getElementById('modal-icon-container').innerHTML = iconSvg;
+            }
+            
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('opacity-100');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
