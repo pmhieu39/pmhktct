@@ -101,6 +101,37 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 Trắc Nghiệm Đố Vui
             </button>
+            <!-- NEW TAB: TIMED EXAM MODE -->
+            <button onclick="switchMode('timed')" id="tab-timed" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Kiểm Tra Hẹn Giờ ⏱️
+            </button>
+        </div>
+
+        <!-- NEW: REAL-TIME CROSS-DEVICE SYNC PANEL -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="relative flex h-3 w-3">
+                    <span id="sync-pulse" class="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                        Đồng Bộ Đa Thiết Bị
+                        <span class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Thời gian thực ⇄</span>
+                    </h3>
+                    <p id="sync-status-indicator" class="text-xs font-semibold text-slate-400">Đang thiết lập kết nối đám mây...</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <div class="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-center flex-1 md:flex-none">
+                    <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider leading-none mb-1">Mã Đồng Bộ Của Bạn</span>
+                    <span id="display-sync-code" class="text-base font-extrabold text-indigo-600 tracking-widest uppercase">------</span>
+                </div>
+                <div class="flex gap-2 flex-1 md:flex-none">
+                    <input type="text" id="sync-input" placeholder="Nhập mã từ máy khác..." class="flex-1 max-w-[180px] bg-slate-50 px-3 py-2 border border-slate-200 rounded-xl text-sm font-semibold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button onclick="connectSyncCode()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-md">Kết Nối</button>
+                </div>
+            </div>
         </div>
 
         <!-- Filter and Search Zone -->
@@ -176,7 +207,7 @@
                             <p class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug" id="card-question-text">Đang tải...</p>
                         </div>
                         <div class="text-center text-xs text-slate-400 font-medium">
-                            Chạm hoặc nhấn phím <span class="bg-slate-200 px-1.5 py-0.5 rounded text-slate-600 font-bold">Space</span> để lật xem đáp án
+                            Chạm hoặc nhấn phím <span class="bg-indigo-100 px-1.5 py-0.5 rounded text-indigo-700 font-bold">Enter</span> / <span class="bg-slate-200 px-1.5 py-0.5 rounded text-slate-600 font-bold">Space</span> để lật hoặc chuyển câu cực nhanh!
                         </div>
                     </div>
 
@@ -189,7 +220,7 @@
                             <p class="text-lg sm:text-xl font-medium text-emerald-300 leading-relaxed" id="card-answer-text">Đang tải...</p>
                         </div>
                         <div class="text-center text-xs text-slate-400 font-medium">
-                            Chạm lại để quay về mặt câu hỏi
+                            Chạm / Nhấn phím <span class="bg-indigo-500 text-white px-1.5 py-0.5 rounded font-bold">Enter</span> để chuyển sang câu tiếp theo
                         </div>
                     </div>
 
@@ -202,11 +233,11 @@
                 <div class="flex gap-3 justify-center">
                     <button onclick="markCardMastery(false)" class="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-3 px-4 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-2xl shadow-sm transition-all text-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Chưa thuộc
+                        Chưa thuộc (Phím 1)
                     </button>
                     <button onclick="markCardMastery(true)" class="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-3 px-4 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 font-bold rounded-2xl shadow-sm transition-all text-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Đã thuộc bài
+                        Đã thuộc bài (Phím 2)
                     </button>
                 </div>
 
@@ -238,7 +269,7 @@
                 </div>
             </div>
 
-            <!-- NEW: QUIZ CUSTOM CONFIGURATION PANEL -->
+            <!-- QUIZ CUSTOM CONFIGURATION PANEL -->
             <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col gap-4">
                 <h3 class="text-xs font-bold text-slate-800 flex items-center gap-2">
                     <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -317,6 +348,126 @@
             </div>
         </section>
 
+        <!-- ================= NEW: MODE 4: TIMED EXAM MODE ================= -->
+        <section id="mode-timed" class="hidden flex-col max-w-2xl mx-auto w-full gap-6">
+            <!-- Header with Live Timer -->
+            <div class="bg-gradient-to-r from-red-600 to-slate-900 text-white p-6 rounded-3xl shadow-lg flex justify-between items-center">
+                <div>
+                    <span class="text-xs font-bold text-red-200 uppercase tracking-wider">Chế độ thi thử áp lực</span>
+                    <h2 class="text-lg font-bold">Kiểm Tra Hẹn Giờ</h2>
+                </div>
+                <div class="text-right flex flex-col items-end">
+                    <p class="text-xs text-slate-300">Thời gian còn lại</p>
+                    <div class="flex items-center gap-2 text-2xl font-black text-yellow-300" id="timed-timer-display">
+                        00:00
+                    </div>
+                </div>
+            </div>
+
+            <!-- Setup Config Card (Visible only when timed exam has not started) -->
+            <div id="timed-setup-card" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">⏱️ Khởi Tạo Đợt Kiểm Tra</h3>
+                    <p class="text-xs text-slate-500">Đặt thời gian và nhấn bắt đầu để kiểm tra kiến thức dưới áp lực thời gian thực.</p>
+                </div>
+
+                <!-- Time Range Selector Slider (2 to 60 Minutes) -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Thời gian làm bài:</span>
+                        <span id="timed-minutes-label" class="text-lg font-extrabold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-xl border border-indigo-100">15 Phút</span>
+                    </div>
+                    <input type="range" id="timed-time-slider" min="2" max="60" value="15" oninput="updateTimedSliderLabel(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400">
+                        <span>2 Phút</span>
+                        <span>15 Phút</span>
+                        <span>30 Phút</span>
+                        <span>45 Phút</span>
+                        <span>60 Phút</span>
+                    </div>
+                </div>
+
+                <!-- Question Pool Selection -->
+                <div class="flex flex-col gap-2">
+                    <span class="text-xs font-bold text-slate-500 uppercase">Chọn phạm vi đề:</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="setTimedPool('all')" id="btn-timedpool-all" class="py-3 px-4 rounded-xl text-xs font-bold border transition-all text-slate-700 bg-white border-slate-200">
+                            Toàn Bộ (86 câu)
+                        </button>
+                        <button onclick="setTimedPool('easy')" id="btn-timedpool-easy" class="py-3 px-4 rounded-xl text-xs font-bold border transition-all text-emerald-700 bg-emerald-50/50 border-emerald-200">
+                            50 Câu Dễ & Ngắn
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="startTimedExam()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-lg transition-all text-sm tracking-wide">
+                    Bắt Đầu Làm Bài 🚀
+                </button>
+            </div>
+
+            <!-- Active Test Card (Visible during test) -->
+            <div id="timed-active-card" class="hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <span class="text-xs font-bold text-indigo-600 uppercase" id="timed-question-indicator">Câu hỏi 1 / 10</span>
+                    <span class="text-[10px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full" id="timed-question-part">PHẦN I</span>
+                </div>
+
+                <div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-800 leading-snug" id="timed-question-text">Câu hỏi sẽ hiển thị ở đây?</h3>
+                </div>
+
+                <!-- Choice Options Grid -->
+                <div class="flex flex-col gap-3" id="timed-options-container">
+                    <!-- Options populated here -->
+                </div>
+
+                <!-- Footer navigation for exam -->
+                <div class="flex justify-between items-center pt-2">
+                    <div class="text-xs font-bold text-slate-400">
+                        Đang làm: <span id="timed-answered-stats" class="text-slate-700 font-extrabold">0/10</span> câu
+                    </div>
+                    <button onclick="finishTimedExam(true)" class="py-2.5 px-4 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition-all">
+                        Nộp Bài Sớm
+                    </button>
+                </div>
+            </div>
+
+            <!-- Score Summary Card (Visible after test finishes) -->
+            <div id="timed-score-card" class="hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col items-center text-center gap-6">
+                <div class="bg-indigo-50 text-indigo-600 p-4 rounded-full" id="timed-result-icon">
+                    🏆
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800">Kết Quả Kiểm Tra</h3>
+                    <p class="text-xs text-slate-400 mt-1" id="timed-result-message">Bạn đã hoàn thành bài kiểm tra đúng hạn!</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 w-full max-w-sm">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="text-lg font-black text-indigo-600 block" id="stat-correct">0</span>
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">Chính xác</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="text-lg font-black text-rose-500 block" id="stat-wrong">0</span>
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">Sai sót</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="text-lg font-black text-emerald-500 block" id="stat-percent">0%</span>
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">Tỷ lệ</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 w-full">
+                    <button onclick="resetTimedExamSetup()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl text-xs transition-all">
+                        Cấu Hình Lại ⚙️
+                    </button>
+                    <button onclick="startTimedExam()" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xs transition-all shadow-md">
+                        Thi Lại Ngay 🚀
+                    </button>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Global Custom Notification Modal (Replacement for window.alert) -->
@@ -330,6 +481,172 @@
             <button onclick="closeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all text-sm shadow-md">Đóng</button>
         </div>
     </div>
+
+    <!-- Firebase SDK Imports & Real-time Sync Modular Logic Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global context variables
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const customToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let currentSyncCode = localStorage.getItem('ktct_sync_code') || '';
+        let cloudUnsubscribe = null;
+
+        // Generate clean unique uppercase sync code
+        function generateRandomCode(length = 6) {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Avoid ambiguous chars
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Initialize Firebase Cloud syncing
+        async function setupFirebase() {
+            if (!firebaseConfig) {
+                console.warn("Firebase configuration not available in preview environment.");
+                document.getElementById('sync-status-indicator').innerText = "Chế độ lưu ngoại tuyến (Offline)";
+                return;
+            }
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (!currentSyncCode) {
+                    currentSyncCode = generateRandomCode(6);
+                    localStorage.setItem('ktct_sync_code', currentSyncCode);
+                }
+                document.getElementById('display-sync-code').innerText = currentSyncCode;
+
+                // RULE 3: Auth Before Queries
+                if (customToken) {
+                    await signInWithCustomToken(auth, customToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        document.getElementById('sync-status-indicator').innerText = "Trực tuyến (Đã kết nối đám mây)";
+                        document.getElementById('sync-status-indicator').className = "text-xs font-bold text-emerald-600 flex items-center gap-1.5";
+                        document.getElementById('sync-pulse').className = "w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping";
+                        listenToCloud(currentSyncCode);
+                    } else {
+                        currentUser = null;
+                        document.getElementById('sync-status-indicator').innerText = "Mất kết nối tài khoản";
+                        document.getElementById('sync-status-indicator').className = "text-xs font-bold text-amber-600 flex items-center gap-1.5";
+                        document.getElementById('sync-pulse').className = "w-2.5 h-2.5 bg-amber-500 rounded-full";
+                    }
+                });
+
+            } catch (e) {
+                console.error("Firebase Initialization Error:", e);
+                document.getElementById('sync-status-indicator').innerText = "Lỗi kết nối đám mây. Đang chạy ngoại tuyến.";
+            }
+        }
+
+        // Listen to Firestore updates on selected sync code (RULE 1 strictly applied)
+        function listenToCloud(code) {
+            if (!db || !code || !currentUser) return;
+            if (cloudUnsubscribe) cloudUnsubscribe();
+
+            // RULE 1: /artifacts/{appId}/public/data/{collectionName}/{documentId}
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'syncProfiles', code);
+            
+            cloudUnsubscribe = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudData = docSnap.data();
+                    
+                    // Pull remote changes
+                    window.favorites = cloudData.favorites || [];
+                    window.learnedList = cloudData.learnedList || [];
+                    
+                    localStorage.setItem('ktct_favorites', JSON.stringify(window.favorites));
+                    localStorage.setItem('ktct_learned', JSON.stringify(window.learnedList));
+                    
+                    // Refresh app views
+                    window.updateGlobalProgress();
+                    if (window.currentMode === 'list') window.renderList();
+                    if (window.currentMode === 'flashcards') window.resetFlashcardDeck();
+                } else {
+                    // Document does not exist yet - sync local seed data upwards
+                    syncToCloud();
+                }
+            }, (error) => {
+                console.error("Cloud synchronizer error:", error);
+            });
+        }
+
+        // Save current progress to cloud node
+        async function syncToCloud() {
+            if (!db || !currentSyncCode || !currentUser) return;
+            try {
+                // RULE 1: /artifacts/{appId}/public/data/{collectionName}/{documentId}
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'syncProfiles', currentSyncCode);
+                await setDoc(docRef, {
+                    favorites: window.favorites,
+                    learnedList: window.learnedList,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+            } catch (e) {
+                console.error("Cloud write failed:", e);
+            }
+        }
+
+        // Link with an external Sync Code
+        window.connectSyncCode = async function() {
+            const inputVal = document.getElementById('sync-input').value.trim().toUpperCase();
+            if (!inputVal) {
+                showToast("Vui lòng nhập mã đồng bộ!", "info");
+                return;
+            }
+            if (inputVal.length !== 6) {
+                showToast("Mã đồng bộ phải chứa đúng 6 ký tự!", "info");
+                return;
+            }
+
+            if (!db || !currentUser) {
+                showToast("Chưa kết nối máy chủ Cloud, hãy tải lại trang!", "info");
+                return;
+            }
+
+            // Test fetch document to ensure it's valid/created or create a new linked session
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'syncProfiles', inputVal);
+            try {
+                const docSnap = await getDoc(docRef);
+                currentSyncCode = inputVal;
+                localStorage.setItem('ktct_sync_code', currentSyncCode);
+                document.getElementById('display-sync-code').innerText = currentSyncCode;
+                document.getElementById('sync-input').value = "";
+                
+                // Start listening to the new code channel
+                listenToCloud(currentSyncCode);
+                showToast("Đồng bộ thiết bị thành công! 🎉", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi kết nối mã đồng bộ. Thử lại sau!", "info");
+            }
+        }
+
+        // Export local triggers to update cloud
+        window.triggerCloudSave = function() {
+            syncToCloud();
+        };
+
+        // Bootstrap on load
+        setupFirebase();
+    </script>
 
     <!-- Embedded Complete 86 Q&A Database (with exactly 50 curated short/easy items marked with 'easy: true') -->
     <script>
@@ -432,44 +749,58 @@
         ];
 
         // Application State
-        let currentMode = 'list';
-        let activePartFilter = 'easy'; // Set DEFAULT filter to Easy 50 for quick study!
-        let searchQuery = '';
-        let favorites = JSON.parse(localStorage.getItem('ktct_favorites') || '[]');
-        let learnedList = JSON.parse(localStorage.getItem('ktct_learned') || '[]');
+        window.currentMode = 'list';
+        window.activePartFilter = 'easy'; // Set DEFAULT filter to Easy 50 for quick study!
+        window.searchQuery = '';
+        window.favorites = JSON.parse(localStorage.getItem('ktct_favorites') || '[]');
+        window.learnedList = JSON.parse(localStorage.getItem('ktct_learned') || '[]');
         
         // Flashcard State
-        let currentCardIndex = 0;
-        let isCardFlipped = false;
-        let filteredCards = [...QUESTIONS_DATABASE];
+        window.currentCardIndex = 0;
+        window.isCardFlipped = false;
+        window.filteredCards = [...QUESTIONS_DATABASE];
 
-        // Quiz Config State (New Interactive Parameters)
-        let quizRange = 'easy';            // 'all' or 'easy'
-        let quizShuffleQuestions = true;   // true: random order, false: sequential order (1 -> end)
-        let quizShuffleAnswers = true;     // true: shuffle options, false: A is always correct
+        // Quiz Config State
+        window.quizRange = 'easy';            // 'all' or 'easy'
+        window.quizShuffleQuestions = true;   // true: random order, false: sequential order (1 -> end)
+        window.quizShuffleAnswers = true;     // true: shuffle options, false: A is always correct
         
         // Quiz Running State
-        let currentQuizQuestion = null;
-        let quizScore = 0;
-        let quizTotal = 0;
-        let hasAnsweredQuiz = false;
-        let sequentialPool = [];           // active pool of quiz questions
-        let quizSequentialIndex = 0;       // tracks sequential progress in the active pool
+        window.currentQuizQuestion = null;
+        window.quizScore = 0;
+        window.quizTotal = 0;
+        window.hasAnsweredQuiz = false;
+        window.sequentialPool = [];           // active pool of quiz questions
+        window.quizSequentialIndex = 0;       // tracks sequential progress in the active pool
+
+        // TIMED EXAM STATE (NEW)
+        window.timedMinutes = 15;
+        window.timedPoolType = 'easy'; // 'all' or 'easy'
+        window.timedQuestions = [];
+        window.timedCurrentIndex = 0;
+        window.timedAnswers = {}; // {questionId: selectedAnswer}
+        window.timedTimerInterval = null;
+        window.timedSecondsRemaining = 0;
 
         // Initialize App on DOM Ready
-        window.onload = function() {
-            renderList();
-            updateGlobalProgress();
-            // Keyboard Listener for Flashcard Flipping (Spacebar) and Navigation
+        window.renderAppOnStart = function() {
+            window.renderList();
+            window.updateGlobalProgress();
             document.addEventListener('keydown', handleKeyboardShortcuts);
         };
 
-        // Switch Screen Modes
-        function switchMode(mode) {
-            currentMode = mode;
+        // Switch Screen Modes (UPDATED WITH TIMED MODE)
+        window.switchMode = function(mode) {
+            window.currentMode = mode;
             
+            // Clear any active Timed Exam interval if switching away
+            if (mode !== 'timed' && window.timedTimerInterval) {
+                clearInterval(window.timedTimerInterval);
+                window.timedTimerInterval = null;
+            }
+
             // Toggle active classes on tabs
-            const tabs = ['list', 'flashcards', 'quiz'];
+            const tabs = ['list', 'flashcards', 'quiz', 'timed'];
             tabs.forEach(t => {
                 const tabBtn = document.getElementById(`tab-${t}`);
                 if (t === mode) {
@@ -486,36 +817,40 @@
             document.getElementById('mode-flashcards').classList.toggle('flex', mode === 'flashcards');
             document.getElementById('mode-quiz').classList.toggle('hidden', mode !== 'quiz');
             document.getElementById('mode-quiz').classList.toggle('flex', mode === 'quiz');
+            document.getElementById('mode-timed').classList.toggle('hidden', mode !== 'timed');
+            document.getElementById('mode-timed').classList.toggle('flex', mode === 'timed');
 
-            // Hide/Show filter zone depending on mode (not needed for Quiz)
-            document.getElementById('filter-zone').classList.toggle('hidden', mode === 'quiz');
+            // Hide/Show filter zone depending on mode
+            document.getElementById('filter-zone').classList.toggle('hidden', mode === 'quiz' || mode === 'timed');
 
             if (mode === 'flashcards') {
-                resetFlashcardDeck();
+                window.resetFlashcardDeck();
             } else if (mode === 'quiz') {
-                resetQuiz();
+                window.resetQuiz();
+            } else if (mode === 'timed') {
+                window.resetTimedExamSetup();
             } else {
-                renderList();
+                window.renderList();
             }
         }
 
         // Get filtered dataset based on search and part filters
-        function getFilteredData() {
+        window.getFilteredData = function() {
             return QUESTIONS_DATABASE.filter(q => {
-                const matchesPart = activePartFilter === 'all' || 
-                                    (activePartFilter === 'easy' && q.easy) || 
-                                    (activePartFilter !== 'easy' && q.part === activePartFilter);
-                const matchesFavorite = activePartFilter === 'fav' ? favorites.includes(q.id) : true;
-                const queryClean = searchQuery.toLowerCase().trim();
+                const matchesPart = window.activePartFilter === 'all' || 
+                                    (window.activePartFilter === 'easy' && q.easy) || 
+                                    (window.activePartFilter !== 'easy' && q.part === window.activePartFilter);
+                const matchesFavorite = window.activePartFilter === 'fav' ? window.favorites.includes(q.id) : true;
+                const queryClean = window.searchQuery.toLowerCase().trim();
                 const matchesSearch = q.question.toLowerCase().includes(queryClean) || q.answer.toLowerCase().includes(queryClean);
                 return matchesPart && matchesFavorite && matchesSearch;
             });
         }
 
         // --- MODE 1: LIST VIEW LOGIC ---
-        function renderList() {
+        window.renderList = function() {
             const container = document.getElementById('questions-container');
-            const data = getFilteredData();
+            const data = window.getFilteredData();
             
             document.getElementById('list-count-label').innerText = `Đang hiển thị: ${data.length} câu`;
             
@@ -533,8 +868,8 @@
             }
 
             container.innerHTML = data.map(q => {
-                const isFav = favorites.includes(q.id);
-                const isLearned = learnedList.includes(q.id);
+                const isFav = window.favorites.includes(q.id);
+                const isLearned = window.learnedList.includes(q.id);
                 
                 return `
                     <div class="bg-white border ${isLearned ? 'border-emerald-200 bg-emerald-50/10' : 'border-slate-200'} rounded-2xl p-5 hover:shadow-md transition-all flex flex-col justify-between gap-4 relative group">
@@ -582,7 +917,7 @@
         }
 
         // Toggle Single Answer visibility in List
-        function toggleAnswerVisibility(id) {
+        window.toggleAnswerVisibility = function(id) {
             const answerEl = document.getElementById(`answer-text-${id}`);
             const btnText = document.getElementById(`btn-text-${id}`);
             const eyeIcon = document.getElementById(`eye-icon-${id}`);
@@ -601,8 +936,8 @@
         }
 
         // Show or Hide All Answers globally on list view
-        function toggleAllAnswers(show) {
-            const data = getFilteredData();
+        window.toggleAllAnswers = function(show) {
+            const data = window.getFilteredData();
             data.forEach(q => {
                 const answerEl = document.getElementById(`answer-text-${q.id}`);
                 const btnText = document.getElementById(`btn-text-${q.id}`);
@@ -619,8 +954,8 @@
         }
 
         // --- DECK FILTERS ---
-        function filterPart(part) {
-            activePartFilter = part;
+        window.filterPart = function(part) {
+            window.activePartFilter = part;
             
             // Toggle active style on part buttons
             const buttons = document.querySelectorAll('.part-btn');
@@ -644,60 +979,68 @@
                 }
             });
 
-            if (currentMode === 'list') {
-                renderList();
-            } else if (currentMode === 'flashcards') {
-                resetFlashcardDeck();
+            if (window.currentMode === 'list') {
+                window.renderList();
+            } else if (window.currentMode === 'flashcards') {
+                window.resetFlashcardDeck();
             }
         }
 
-        function filterFavorite() {
-            filterPart('fav');
+        window.filterFavorite = function() {
+            window.filterPart('fav');
         }
 
-        function handleSearch() {
-            searchQuery = document.getElementById('search-input').value;
-            if (currentMode === 'list') {
-                renderList();
-            } else if (currentMode === 'flashcards') {
-                resetFlashcardDeck();
+        window.handleSearch = function() {
+            window.searchQuery = document.getElementById('search-input').value;
+            if (window.currentMode === 'list') {
+                window.renderList();
+            } else if (window.currentMode === 'flashcards') {
+                window.resetFlashcardDeck();
             }
         }
 
         // --- BOOKMARK & MASTERY PERSISTENCE ---
-        function toggleItemFavorite(id) {
-            const index = favorites.indexOf(id);
+        window.toggleItemFavorite = function(id) {
+            const index = window.favorites.indexOf(id);
             if (index > -1) {
-                favorites.splice(index, 1);
+                window.favorites.splice(index, 1);
             } else {
-                favorites.push(id);
+                window.favorites.push(id);
             }
-            localStorage.setItem('ktct_favorites', JSON.stringify(favorites));
+            localStorage.setItem('ktct_favorites', JSON.stringify(window.favorites));
             
-            if (currentMode === 'list') {
-                renderList();
+            if (typeof window.triggerCloudSave === 'function') {
+                window.triggerCloudSave();
+            }
+
+            if (window.currentMode === 'list') {
+                window.renderList();
             }
         }
 
         // Toggle item learned state
-        function toggleItemLearned(id) {
-            const index = learnedList.indexOf(id);
+        window.toggleItemLearned = function(id) {
+            const index = window.learnedList.indexOf(id);
             if (index > -1) {
-                learnedList.splice(index, 1);
+                window.learnedList.splice(index, 1);
             } else {
-                learnedList.push(id);
+                window.learnedList.push(id);
             }
-            localStorage.setItem('ktct_learned', JSON.stringify(learnedList));
-            updateGlobalProgress();
+            localStorage.setItem('ktct_learned', JSON.stringify(window.learnedList));
+            window.updateGlobalProgress();
             
-            if (currentMode === 'list') {
-                renderList();
+            if (typeof window.triggerCloudSave === 'function') {
+                window.triggerCloudSave();
+            }
+
+            if (window.currentMode === 'list') {
+                window.renderList();
             }
         }
 
-        function updateGlobalProgress() {
+        window.updateGlobalProgress = function() {
             const total = QUESTIONS_DATABASE.length;
-            const learnedCount = learnedList.length;
+            const learnedCount = window.learnedList.length;
             const percent = Math.round((learnedCount / total) * 100);
             
             document.getElementById('progress-percent').innerText = `${percent}%`;
@@ -707,15 +1050,15 @@
         }
 
         // --- MODE 2: FLASHCARD 3D DECK LOGIC ---
-        function resetFlashcardDeck() {
-            filteredCards = getFilteredData();
-            currentCardIndex = 0;
-            isCardFlipped = false;
+        window.resetFlashcardDeck = function() {
+            window.filteredCards = window.getFilteredData();
+            window.currentCardIndex = 0;
+            window.isCardFlipped = false;
             
             const innerCard = document.getElementById('flashcard-inner');
             innerCard.classList.remove('rotate-y-180');
 
-            if (filteredCards.length === 0) {
+            if (window.filteredCards.length === 0) {
                 document.getElementById('card-question-text').innerText = "Danh sách thẻ trống! Hãy thử đổi bộ lọc hoặc thêm câu hỏi yêu thích.";
                 document.getElementById('card-answer-text').innerText = "Không có dữ liệu.";
                 document.getElementById('card-index-indicator').innerText = "0";
@@ -725,16 +1068,16 @@
                 return;
             }
 
-            loadCardData();
+            window.loadCardData();
         }
 
-        function loadCardData() {
-            if (filteredCards.length === 0) return;
-            const currentCard = filteredCards[currentCardIndex];
+        window.loadCardData = function() {
+            if (window.filteredCards.length === 0) return;
+            const currentCard = window.filteredCards[window.currentCardIndex];
             
             // Display indicator numbers
-            document.getElementById('card-index-indicator').innerText = currentCardIndex + 1;
-            document.getElementById('card-total-indicator').innerText = filteredCards.length;
+            document.getElementById('card-index-indicator').innerText = window.currentCardIndex + 1;
+            document.getElementById('card-total-indicator').innerText = window.filteredCards.length;
             document.getElementById('card-part-indicator').innerText = currentCard.part.toUpperCase() + ` (Câu ${currentCard.id})`;
             
             // Set front text and back text
@@ -751,83 +1094,85 @@
 
             // Handle bookmark icon
             const favIcon = document.getElementById('card-fav-icon');
-            if (favorites.includes(currentCard.id)) {
+            if (window.favorites.includes(currentCard.id)) {
                 favIcon.className = "w-6 h-6 fill-current text-amber-500";
             } else {
                 favIcon.className = "w-6 h-6 fill-current text-slate-300 hover:text-amber-500";
             }
         }
 
-        function flipCard() {
-            if (filteredCards.length === 0) return;
-            isCardFlipped = !isCardFlipped;
+        window.flipCard = function() {
+            if (window.filteredCards.length === 0) return;
+            window.isCardFlipped = !window.isCardFlipped;
             const innerCard = document.getElementById('flashcard-inner');
-            if (isCardFlipped) {
+            if (window.isCardFlipped) {
                 innerCard.classList.add('rotate-y-180');
             } else {
                 innerCard.classList.remove('rotate-y-180');
             }
         }
 
-        function nextCard() {
-            if (filteredCards.length === 0) return;
-            currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
+        window.nextCard = function() {
+            if (window.filteredCards.length === 0) return;
+            window.currentCardIndex = (window.currentCardIndex + 1) % window.filteredCards.length;
             
             // Reset flipping first to prevent looking at the next answer immediately
-            if (isCardFlipped) {
-                flipCard();
-                setTimeout(loadCardData, 200); // smooth switch during flipping back
+            if (window.isCardFlipped) {
+                window.flipCard();
+                setTimeout(window.loadCardData, 200); // smooth switch during flipping back
             } else {
-                loadCardData();
+                window.loadCardData();
             }
         }
 
         // Prev Card logic
-        function prevCard() {
-            if (filteredCards.length === 0) return;
-            currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
+        window.prevCard = function() {
+            if (window.filteredCards.length === 0) return;
+            window.currentCardIndex = (window.currentCardIndex - 1 + window.filteredCards.length) % window.filteredCards.length;
             
-            if (isCardFlipped) {
-                flipCard();
-                setTimeout(loadCardData, 200);
+            if (window.isCardFlipped) {
+                window.flipCard();
+                setTimeout(window.loadCardData, 200);
             } else {
-                loadCardData();
+                window.loadCardData();
             }
         }
 
         // Action when user clicks "Đã thuộc" or "Chưa thuộc" on Flashcards
-        function markCardMastery(isLearned) {
-            if (filteredCards.length === 0) return;
-            const currentCard = filteredCards[currentCardIndex];
+        window.markCardMastery = function(isLearned) {
+            if (window.filteredCards.length === 0) return;
+            const currentCard = window.filteredCards[window.currentCardIndex];
             
-            const indexInLearned = learnedList.indexOf(currentCard.id);
+            const indexInLearned = window.learnedList.indexOf(currentCard.id);
             
             if (isLearned) {
-                // If marked as learned
                 if (indexInLearned === -1) {
-                    learnedList.push(currentCard.id);
+                    window.learnedList.push(currentCard.id);
                 }
             } else {
-                // If marked as unlearned/review
                 if (indexInLearned > -1) {
-                    learnedList.splice(indexInLearned, 1);
+                    window.learnedList.splice(indexInLearned, 1);
                 }
             }
 
-            localStorage.setItem('ktct_learned', JSON.stringify(learnedList));
-            updateGlobalProgress();
+            localStorage.setItem('ktct_learned', JSON.stringify(window.learnedList));
+            window.updateGlobalProgress();
             
+            if (typeof window.triggerCloudSave === 'function') {
+                window.triggerCloudSave();
+            }
+
             // Automatically advance to the next card with subtle notification
             showToast(isLearned ? "Đã ghi nhận! Thẻ tiếp theo..." : "Ghi nhận cần ôn lại! Thẻ tiếp theo...", isLearned ? 'success' : 'info');
-            nextCard();
+            window.nextCard();
         }
 
-        function toggleCardFavorite(event) {
+        window.toggleCardFavorite = function(event) {
             event.stopPropagation(); // prevent card flip when clicking favorite icon
-            if (filteredCards.length === 0) return;
-            const currentCard = filteredCards[currentCardIndex];
-            toggleItemFavorite(currentCard.id);
-            loadCardData();
+            if (window.filteredCards.length === 0) return;
+            const currentCard = window.filteredCards[window.currentCardIndex];
+            window.toggleItemFavorite(currentCard.id);
+            window.loadCardData();
         }
 
         // Custom brief notification toast
@@ -851,20 +1196,29 @@
             }, 1800);
         }
 
-        // Keyboard navigation for study convenience
+        // Keyboard navigation for study convenience (UPDATED WITH ENTER SUPPORT)
         function handleKeyboardShortcuts(e) {
-            if (currentMode !== 'flashcards') return;
+            if (window.currentMode !== 'flashcards') return;
             if (e.code === 'Space') {
                 e.preventDefault(); // prevent scrolling
-                flipCard();
+                window.flipCard();
+            } else if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+                e.preventDefault();
+                // If currently flipped to answer side, ENTER will proceed to next card.
+                // If on question side, ENTER flips the card to reveal answer.
+                if (window.isCardFlipped) {
+                    window.nextCard();
+                } else {
+                    window.flipCard();
+                }
             } else if (e.code === 'ArrowRight') {
-                nextCard();
+                window.nextCard();
             } else if (e.code === 'ArrowLeft') {
-                prevCard();
-            } else if (e.code === 'Digit1') {
-                markCardMastery(false); // Key 1 for Unlearned
-            } else if (e.code === 'Digit2') {
-                markCardMastery(true);  // Key 2 for Mastered
+                window.prevCard();
+            } else if (e.code === 'Digit1' || e.code === 'Numpad1') {
+                window.markCardMastery(false); // Key 1 for Unlearned
+            } else if (e.code === 'Digit2' || e.code === 'Numpad2') {
+                window.markCardMastery(true);  // Key 2 for Mastered
             }
         }
 
@@ -872,22 +1226,22 @@
         // --- MODE 3: SMART QUIZ LOGIC (UPGRADED) ---
         
         // 1. Config Setters
-        function setQuizRange(range) {
-            quizRange = range;
+        window.setQuizRange = function(range) {
+            window.quizRange = range;
             updateQuizConfigUI();
-            resetQuiz();
+            window.resetQuiz();
         }
 
-        function setQuizShuffleQuestions(shuffle) {
-            quizShuffleQuestions = shuffle;
+        window.setQuizShuffleQuestions = function(shuffle) {
+            window.quizShuffleQuestions = shuffle;
             updateQuizConfigUI();
-            resetQuiz();
+            window.resetQuiz();
         }
 
-        function setQuizShuffleAnswers(shuffle) {
-            quizShuffleAnswers = shuffle;
+        window.setQuizShuffleAnswers = function(shuffle) {
+            window.quizShuffleAnswers = shuffle;
             updateQuizConfigUI();
-            resetQuiz();
+            window.resetQuiz();
         }
 
         // Sync Quiz Configuration Tab Buttons UI
@@ -895,7 +1249,7 @@
             // Range (All vs Easy)
             const rangeAll = document.getElementById('btn-range-all');
             const rangeEasy = document.getElementById('btn-range-easy');
-            if (quizRange === 'all') {
+            if (window.quizRange === 'all') {
                 rangeAll.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
                 rangeEasy.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
             } else {
@@ -906,7 +1260,7 @@
             // Shuffle Questions Toggle
             const qTrue = document.getElementById('btn-q-shuffle-true');
             const qFalse = document.getElementById('btn-q-shuffle-false');
-            if (quizShuffleQuestions) {
+            if (window.quizShuffleQuestions) {
                 qTrue.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
                 qFalse.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
             } else {
@@ -917,7 +1271,7 @@
             // Shuffle Answers Toggle
             const aTrue = document.getElementById('btn-a-shuffle-true');
             const aFalse = document.getElementById('btn-a-shuffle-false');
-            if (quizShuffleAnswers) {
+            if (window.quizShuffleAnswers) {
                 aTrue.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
                 aFalse.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
             } else {
@@ -927,91 +1281,89 @@
         }
 
         // Reset and rebuild the Quiz state
-        function resetQuiz() {
-            quizScore = 0;
-            quizTotal = 0;
-            quizSequentialIndex = 0;
+        window.resetQuiz = function() {
+            window.quizScore = 0;
+            window.quizTotal = 0;
+            window.quizSequentialIndex = 0;
             document.getElementById('quiz-score-display').innerText = "0 / 0";
             
             updateQuizConfigUI();
 
             // Filter raw pool
-            const pool = quizRange === 'easy' 
+            const pool = window.quizRange === 'easy' 
                 ? QUESTIONS_DATABASE.filter(q => q.easy) 
                 : QUESTIONS_DATABASE;
 
             // Make a unique pool copy
-            sequentialPool = [...pool];
+            window.sequentialPool = [...pool];
 
             // If user wants random order, shuffle the questions pool once
-            if (quizShuffleQuestions) {
-                shuffleArray(sequentialPool);
+            if (window.quizShuffleQuestions) {
+                window.shuffleArray(window.sequentialPool);
             } else {
                 // Keep default numerical index (Câu 1, Câu 2...)
-                sequentialPool.sort((a, b) => a.id - b.id);
+                window.sequentialPool.sort((a, b) => a.id - b.id);
             }
 
-            generateNextQuizQuestion();
+            window.generateNextQuizQuestion();
         }
 
         // Generate and render the active question from pool
-        function generateNextQuizQuestion() {
-            hasAnsweredQuiz = false;
+        window.generateNextQuizQuestion = function() {
+            window.hasAnsweredQuiz = false;
             
             // Hide feedback panel and Next button
             document.getElementById('quiz-feedback-box').className = "hidden";
             document.getElementById('quiz-next-btn').className = "hidden";
 
-            if (sequentialPool.length === 0) {
+            if (window.sequentialPool.length === 0) {
                 document.getElementById('quiz-question-text').innerText = "Vui lòng chọn bộ đề hợp lệ.";
                 return;
             }
 
             // Safe wrap-around checks
-            if (quizSequentialIndex >= sequentialPool.length) {
-                quizSequentialIndex = 0;
-                if (quizShuffleQuestions) {
-                    shuffleArray(sequentialPool);
+            if (window.quizSequentialIndex >= window.sequentialPool.length) {
+                window.quizSequentialIndex = 0;
+                if (window.quizShuffleQuestions) {
+                    window.shuffleArray(window.sequentialPool);
                 }
                 showToast("Đã hoàn thành toàn bộ đề ôn tập! Bắt đầu chu kỳ mới.", "success");
             }
 
-            currentQuizQuestion = sequentialPool[quizSequentialIndex];
+            window.currentQuizQuestion = window.sequentialPool[window.quizSequentialIndex];
 
             // Render details
             document.getElementById('quiz-question-part').innerHTML = `
-                ${currentQuizQuestion.part} (Câu ${currentQuizQuestion.id})
-                ${currentQuizQuestion.easy ? `<span class="ml-1 bg-emerald-500 text-white text-[9px] px-1.5 py-0.5 rounded-full">DỄ & NGẮN ⚡</span>` : ''}
-                <span class="ml-1.5 text-slate-400 font-semibold">[Học câu: ${quizSequentialIndex + 1}/${sequentialPool.length}]</span>
+                ${window.currentQuizQuestion.part} (Câu ${window.currentQuizQuestion.id})
+                ${window.currentQuizQuestion.easy ? `<span class="ml-1 bg-emerald-500 text-white text-[9px] px-1.5 py-0.5 rounded-full">DỄ & NGẮN ⚡</span>` : ''}
+                <span class="ml-1.5 text-slate-400 font-semibold">[Học câu: ${window.quizSequentialIndex + 1}/${window.sequentialPool.length}]</span>
             `;
-            document.getElementById('quiz-question-text').innerText = currentQuizQuestion.question;
+            document.getElementById('quiz-question-text').innerText = window.currentQuizQuestion.question;
 
             // Generate wrong distractors
             const distractors = [];
             while (distractors.length < 3) {
                 const randomOther = QUESTIONS_DATABASE[Math.floor(Math.random() * QUESTIONS_DATABASE.length)];
-                if (randomOther.id !== currentQuizQuestion.id && !distractors.includes(randomOther.answer)) {
+                if (randomOther.id !== window.currentQuizQuestion.id && !distractors.includes(randomOther.answer)) {
                     distractors.push(randomOther.answer);
                 }
             }
 
             // Construct choices list
             let allOptions = [];
-            if (quizShuffleAnswers) {
+            if (window.quizShuffleAnswers) {
                 // Mode 1: Shuffle choices (Harder, standard exam)
-                allOptions = [currentQuizQuestion.answer, ...distractors];
-                shuffleArray(allOptions);
+                allOptions = [window.currentQuizQuestion.answer, ...distractors];
+                window.shuffleArray(allOptions);
             } else {
                 // Mode 2: FIXED answer choice order (Correct answer is ALWAYS choice A)
-                // Outstanding for super-fast spaced learning
-                allOptions = [currentQuizQuestion.answer, ...distractors];
+                allOptions = [window.currentQuizQuestion.answer, ...distractors];
             }
 
             // Render options choices inside buttons
             const optionsContainer = document.getElementById('quiz-options-container');
             optionsContainer.innerHTML = allOptions.map((opt, idx) => {
                 const label = String.fromCharCode(65 + idx); // A, B, C, D
-                const isNoShuffleTrueLabel = (!quizShuffleAnswers && idx === 0) ? ' (Đúng) ' : '';
                 return `
                     <button onclick="submitQuizAnswer('${opt.replace(/'/g, "\\'")}', this)" class="option-btn text-left p-4 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all font-semibold text-sm flex gap-4 items-start focus:outline-none">
                         <span class="bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-lg text-xs border border-slate-200 uppercase">${label}</span>
@@ -1022,15 +1374,15 @@
         }
 
         // Check selected answer correctness
-        function submitQuizAnswer(selectedAnswer, buttonElement) {
-            if (hasAnsweredQuiz) return; 
-            hasAnsweredQuiz = true;
+        window.submitQuizAnswer = function(selectedAnswer, buttonElement) {
+            if (window.hasAnsweredQuiz) return; 
+            window.hasAnsweredQuiz = true;
 
-            quizTotal++;
-            const isCorrect = (selectedAnswer === currentQuizQuestion.answer);
+            window.quizTotal++;
+            const isCorrect = (selectedAnswer === window.currentQuizQuestion.answer);
 
             if (isCorrect) {
-                quizScore++;
+                window.quizScore++;
                 // Style selected button as success
                 buttonElement.className = "option-btn text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-semibold text-sm flex gap-4 items-start focus:outline-none transition-all";
                 buttonElement.querySelector('span').className = "bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-lg text-xs uppercase";
@@ -1043,7 +1395,7 @@
                 const buttons = document.querySelectorAll('.option-btn');
                 buttons.forEach(btn => {
                     const optText = btn.querySelector('.option-text').innerText;
-                    if (optText === currentQuizQuestion.answer) {
+                    if (optText === window.currentQuizQuestion.answer) {
                         btn.className = "option-btn text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-semibold text-sm flex gap-4 items-start focus:outline-none transition-all";
                         btn.querySelector('span').className = "bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-lg text-xs uppercase";
                     }
@@ -1051,7 +1403,7 @@
             }
 
             // Update scores
-            document.getElementById('quiz-score-display').innerText = `${quizScore} / ${quizTotal}`;
+            document.getElementById('quiz-score-display').innerText = `${window.quizScore} / ${window.quizTotal}`;
 
             // Show answer feedback
             const feedbackBox = document.getElementById('quiz-feedback-box');
@@ -1066,7 +1418,7 @@
                 <div>
                     <h4 class="font-bold text-sm">${isCorrect ? 'Đáp án chính xác!' : 'Chưa chính xác rồi!'}</h4>
                     <p class="text-xs mt-1 font-medium leading-relaxed">
-                        <strong>Lý giải đáp án đúng:</strong> ${currentQuizQuestion.answer}
+                        <strong>Lý giải đáp án đúng:</strong> ${window.currentQuizQuestion.answer}
                     </p>
                 </div>
             `;
@@ -1076,13 +1428,209 @@
         }
 
         // Action when Next is clicked
-        function handleNextQuizClick() {
-            quizSequentialIndex++;
-            generateNextQuizQuestion();
+        window.handleNextQuizClick = function() {
+            window.quizSequentialIndex++;
+            window.generateNextQuizQuestion();
         }
 
+
+        // --- MODE 4: TIMED EXAM MODE LOGIC (NEW FEATURE) ---
+
+        // Update Timed slider numerical label
+        window.updateTimedSliderLabel = function(val) {
+            window.timedMinutes = parseInt(val);
+            document.getElementById('timed-minutes-label').innerText = `${val} Phút`;
+        }
+
+        // Toggle Pool type for Timed exam
+        window.setTimedPool = function(poolType) {
+            window.timedPoolType = poolType;
+            const btnAll = document.getElementById('btn-timedpool-all');
+            const btnEasy = document.getElementById('btn-timedpool-easy');
+
+            if (poolType === 'all') {
+                btnAll.className = "py-3 px-4 rounded-xl text-xs font-bold border transition-all text-slate-700 bg-indigo-50 border-indigo-200 font-extrabold";
+                btnEasy.className = "py-3 px-4 rounded-xl text-xs font-bold border transition-all text-slate-500 bg-white border-slate-200";
+            } else {
+                btnAll.className = "py-3 px-4 rounded-xl text-xs font-bold border transition-all text-slate-500 bg-white border-slate-200";
+                btnEasy.className = "py-3 px-4 rounded-xl text-xs font-bold border transition-all text-emerald-700 bg-emerald-50/50 border-emerald-200 font-extrabold";
+            }
+        }
+
+        // Clear timer and display setup form
+        window.resetTimedExamSetup = function() {
+            if (window.timedTimerInterval) {
+                clearInterval(window.timedTimerInterval);
+                window.timedTimerInterval = null;
+            }
+            document.getElementById('timed-timer-display').innerText = `${String(window.timedMinutes).padStart(2, '0')}:00`;
+            document.getElementById('timed-setup-card').classList.remove('hidden');
+            document.getElementById('timed-active-card').classList.add('hidden');
+            document.getElementById('timed-score-card').classList.add('hidden');
+            window.setTimedPool(window.timedPoolType);
+        }
+
+        // Initiate Countdown and render questions
+        window.startTimedExam = function() {
+            // Get original source pool
+            const basePool = window.timedPoolType === 'easy' 
+                ? QUESTIONS_DATABASE.filter(q => q.easy) 
+                : QUESTIONS_DATABASE;
+
+            // Clone and Shuffle pool
+            window.timedQuestions = [...basePool];
+            window.shuffleArray(window.timedQuestions);
+
+            // Limit exam to 10 questions for a high-intensity speedy checkpoint
+            const totalExamQuestions = Math.min(10, window.timedQuestions.length);
+            window.timedQuestions = window.timedQuestions.slice(0, totalExamQuestions);
+
+            window.timedCurrentIndex = 0;
+            window.timedAnswers = {}; // reset previous inputs
+            window.timedSecondsRemaining = window.timedMinutes * 60;
+
+            // UI view shifts
+            document.getElementById('timed-setup-card').classList.add('hidden');
+            document.getElementById('timed-score-card').classList.add('hidden');
+            document.getElementById('timed-active-card').classList.remove('hidden');
+
+            updateTimedExamQuestionUI();
+            startCountdownTimer();
+        }
+
+        // Countdown intervals
+        function startCountdownTimer() {
+            if (window.timedTimerInterval) clearInterval(window.timedTimerInterval);
+            
+            updateTimerDisplay();
+            window.timedTimerInterval = setInterval(() => {
+                window.timedSecondsRemaining--;
+                updateTimerDisplay();
+
+                if (window.timedSecondsRemaining <= 0) {
+                    clearInterval(window.timedTimerInterval);
+                    window.timedTimerInterval = null;
+                    finishTimedExam(false); // Forced submit due to time depletion
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(window.timedSecondsRemaining / 60);
+            const seconds = window.timedSecondsRemaining % 60;
+            document.getElementById('timed-timer-display').innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Load the current active index timed question
+        function updateTimedExamQuestionUI() {
+            const q = window.timedQuestions[window.timedCurrentIndex];
+            
+            // Progress Stats
+            document.getElementById('timed-question-indicator').innerText = `Câu hỏi ${window.timedCurrentIndex + 1} / ${window.timedQuestions.length}`;
+            document.getElementById('timed-question-part').innerText = `${q.part.toUpperCase()} (Câu ${q.id})`;
+            document.getElementById('timed-question-text').innerText = q.question;
+
+            // Populate options with fixed shuffles or choices
+            const distractors = [];
+            while (distractors.length < 3) {
+                const randomOther = QUESTIONS_DATABASE[Math.floor(Math.random() * QUESTIONS_DATABASE.length)];
+                if (randomOther.id !== q.id && !distractors.includes(randomOther.answer)) {
+                    distractors.push(randomOther.answer);
+                }
+            }
+
+            const allOptions = [q.answer, ...distractors];
+            window.shuffleArray(allOptions);
+
+            const optionsContainer = document.getElementById('timed-options-container');
+            const selectedPrev = window.timedAnswers[q.id];
+
+            optionsContainer.innerHTML = allOptions.map((opt, idx) => {
+                const label = String.fromCharCode(65 + idx); // A, B, C, D
+                const isSelected = (selectedPrev === opt);
+
+                return `
+                    <button onclick="saveTimedSelection('${opt.replace(/'/g, "\\'")}', this)" class="w-full text-left p-4 rounded-2xl border transition-all font-semibold text-sm flex gap-4 items-start focus:outline-none ${isSelected ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 hover:border-indigo-300' }">
+                        <span class="${isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'} font-bold px-2 py-0.5 rounded-lg text-xs border border-slate-200 uppercase">${label}</span>
+                        <span class="flex-1 text-slate-700">${opt}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // Update stats
+            const answeredCount = Object.keys(window.timedAnswers).length;
+            document.getElementById('timed-answered-stats').innerText = `${answeredCount}/${window.timedQuestions.length}`;
+        }
+
+        // Cache chosen option and automatically proceed to next question
+        window.saveTimedSelection = function(ansValue) {
+            const q = window.timedQuestions[window.timedCurrentIndex];
+            window.timedAnswers[q.id] = ansValue;
+
+            // Sync stats
+            const answeredCount = Object.keys(window.timedAnswers).length;
+            document.getElementById('timed-answered-stats').innerText = `${answeredCount}/${window.timedQuestions.length}`;
+
+            // Play nice user feedback effect, then proceed
+            setTimeout(() => {
+                if (window.timedCurrentIndex < window.timedQuestions.length - 1) {
+                    window.timedCurrentIndex++;
+                    updateTimedExamQuestionUI();
+                } else {
+                    // Reached the last question
+                    finishTimedExam(true);
+                }
+            }, 300);
+        }
+
+        // Conclude Timed exam and display score breakdown
+        window.finishTimedExam = function(userSubmitted) {
+            if (window.timedTimerInterval) {
+                clearInterval(window.timedTimerInterval);
+                window.timedTimerInterval = null;
+            }
+
+            document.getElementById('timed-active-card').classList.add('hidden');
+            document.getElementById('timed-score-card').classList.remove('hidden');
+
+            let correctCount = 0;
+            window.timedQuestions.forEach(q => {
+                const selected = window.timedAnswers[q.id];
+                if (selected === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const total = window.timedQuestions.length;
+            const wrongCount = total - correctCount;
+            const percentage = Math.round((correctCount / total) * 100);
+
+            // Display Statistics
+            document.getElementById('stat-correct').innerText = correctCount;
+            document.getElementById('stat-wrong').innerText = wrongCount;
+            document.getElementById('stat-percent').innerText = `${percentage}%`;
+
+            const iconContainer = document.getElementById('timed-result-icon');
+            const messageContainer = document.getElementById('timed-result-message');
+
+            if (!userSubmitted) {
+                iconContainer.innerHTML = "⏰";
+                messageContainer.innerText = "Hết giờ làm bài mất rồi! Bài thi đã được tự động nộp.";
+            } else if (percentage >= 80) {
+                iconContainer.innerHTML = "🏆";
+                messageContainer.innerText = "Tuyệt đỉnh xuất sắc! Bạn đã làm chủ hoàn toàn lượng kiến thức.";
+            } else if (percentage >= 50) {
+                iconContainer.innerHTML = "⭐";
+                messageContainer.innerText = "Làm tốt lắm! Chăm chỉ ôn tập thêm để chuẩn bị bứt phá nhé.";
+            } else {
+                iconContainer.innerHTML = "📚";
+                messageContainer.innerText = "Cố gắng lên bạn nhé! Đọc lại danh sách 50 câu dễ sẽ giúp thuộc nhanh hơn.";
+            }
+        }
+
+
         // --- UTILS ---
-        function shuffleArray(array) {
+        window.shuffleArray = function(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
@@ -1090,7 +1638,7 @@
         }
 
         // Custom Modal Utility (Replaces window.alert for sandboxed environment)
-        function showNotification(title, desc, iconSvg) {
+        window.showNotification = function(title, desc, iconSvg) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = desc;
             if (iconSvg) {
@@ -1106,7 +1654,7 @@
             }, 10);
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             const modal = document.getElementById('custom-modal');
             modal.classList.remove('opacity-100');
             modal.firstElementChild.classList.remove('scale-100');
@@ -1115,6 +1663,9 @@
                 modal.classList.add('hidden');
             }, 300);
         }
+
+        // Run local UI init on start
+        window.renderAppOnStart();
     </script>
 </body>
 </html>
